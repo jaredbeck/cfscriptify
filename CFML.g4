@@ -1,29 +1,46 @@
 grammar CFML;
 
-cfm : line* ;
+// Parser Rules
+// ============
+
+cfm : (cfcomment | line)* ;
 
 line :
   tagSet
   | tagAbort ;
 
+/* `cfcomment` must be a parser rule, so that the listener will hear
+about it, but it must be implemented as a lexer rule, so that it can
+have higher precedence than the `WS` rule. */
+cfcomment : CFCOMMENT ;
+
 tagSet : TS 'set' IDENTIFIER EQUALS expression TE ;
 tagAbort : TS 'abort' TE ;
-
-TS : '<cf' ; // Tag Start
-TE : '>' ; // Tag End
-
 expression : literal ; // TODO
-
 literal : BOOLEAN_LITERAL | STRING_LITERAL ;
 
-EQUALS : '=' ;
+// Lexer Rules
+// ===========
 
 BOOLEAN_LITERAL : 'TRUE' | 'FALSE' | 'true' | 'false' ;
+CFCOMMENT : '<!---' .*? '--->' ;
+EQUALS : '=' ;
+TS : '<cf' ; // Tag Start
+TE : '>' ; // Tag End
 
 STRING_LITERAL
   : '"' DoubleStringCharacter* '"'
   | '\'' SingleStringCharacter* '\''
   ;
+
+/* The identifier token should have lower precedence than tokens for
+operators and reserved words, so it appears later in the grammar. */
+IDENTIFIER : LETTER (LETTER|DIGIT)* ;
+
+WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines, and formfeeds
+
+// Lexer Token Fragments
+// =====================
 
 fragment DoubleStringCharacter
   : ~('"')
@@ -67,9 +84,3 @@ fragment DIGIT
   | '\u0e50'..'\u0e59'
   | '\u0ed0'..'\u0ed9'
   | '\u1040'..'\u1049' ;
-
-/* The identifier token should have lower precedence than tokens for
-operators and reserved words, so it appears later in the grammar. */
-IDENTIFIER : LETTER (LETTER|DIGIT)* ;
-
-WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines, and formfeeds

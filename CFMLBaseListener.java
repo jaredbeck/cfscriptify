@@ -15,6 +15,9 @@ public class CFMLBaseListener implements CFMLListener {
 	@Override public void enterCfm(CFMLParser.CfmContext ctx) { }
 	@Override public void exitCfm(CFMLParser.CfmContext ctx) { }
 
+	@Override public void enterCfcomment(CFMLParser.CfcommentContext ctx) { }
+	@Override public void exitCfcomment(CFMLParser.CfcommentContext ctx) { }
+
 	@Override public void enterLine(CFMLParser.LineContext ctx) { }
 	@Override public void exitLine(CFMLParser.LineContext ctx) { }
 

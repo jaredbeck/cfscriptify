@@ -12,6 +12,9 @@ public interface CFMLListener extends ParseTreeListener {
 	void enterCfm(CFMLParser.CfmContext ctx);
 	void exitCfm(CFMLParser.CfmContext ctx);
 
+	void enterCfcomment(CFMLParser.CfcommentContext ctx);
+	void exitCfcomment(CFMLParser.CfcommentContext ctx);
+
 	void enterLine(CFMLParser.LineContext ctx);
 	void exitLine(CFMLParser.LineContext ctx);
 
