@@ -72,4 +72,4 @@ fragment DIGIT
 operators and reserved words, so it appears later in the grammar. */
 IDENTIFIER : LETTER (LETTER|DIGIT)* ;
 
-WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines, and formfeeds
