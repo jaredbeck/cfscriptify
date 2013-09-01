@@ -21,10 +21,10 @@ Should produce
     x = true;
     abort;
 
-Parser
-------
+Parser Generator: ANTLR4
+------------------------
 
-Install ANTLR4
+Install [ANTLR4][7]
 
     export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
     alias antlr4='java -jar /usr/local/lib/antlr-4.0-complete.jar'
@@ -58,3 +58,4 @@ References
 [4]: http://openbd.org/
 [5]: http://websvn.openbd.org/websvn/filedetails.php?repname=OpenBD&path=%2Ftrunk%2Fsrc%2Fcom%2Fnaryx%2Ftagfusion%2Fcfm%2Fparser%2FCFML.g
 [6]: http://openbd.org/about/
+[7]: http://www.antlr.org/
