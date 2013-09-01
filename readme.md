@@ -1,6 +1,8 @@
 CFScriptify
 ===========
 
+Converts CFML tags to cfscript using pure Java.
+
 Usage
 -----
 
@@ -51,6 +53,7 @@ References
     * [ANTLR 4 tree inject/rewrite operator][3]
 * [openbd.org][4]
     * [/trunk/src/com/naryx/tagfusion/cfm/parser/CFML.g][5] (ANTLR3 grammer)
+* [cftag2cfscript][8] (similar project, but written in ColdFusion)
 
 [1]: http://www.antlr.org/api/Java/index.html
 [2]: http://stackoverflow.com/questions/14667781/antlr-4-and-ast-visitors
@@ -59,3 +62,4 @@ References
 [5]: http://websvn.openbd.org/websvn/filedetails.php?repname=OpenBD&path=%2Ftrunk%2Fsrc%2Fcom%2Fnaryx%2Ftagfusion%2Fcfm%2Fparser%2FCFML.g
 [6]: http://openbd.org/about/
 [7]: http://www.antlr.org/
+[8]: https://github.com/pirategaspard/cftag2cfscript
