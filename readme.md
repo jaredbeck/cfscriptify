@@ -14,10 +14,8 @@ Given the following input file `01.cfm`
 
 Compile and run
 
-    cd cfscriptify
-    CLASSPATH=.:/usr/local/lib/antlr-4.0-complete.jar:commons-lang3-3.1.jar
-    javac *.java
-    java CFScriptify test/input/01.cfm
+    ./build.sh
+    ./run.sh test/input/01.cfm
 
 Should produce
 
@@ -25,18 +23,17 @@ Should produce
     x = true;
     abort;
 
-Parser Generator: ANTLR4
-------------------------
+Apologies for not using ant or maven
+------------------------------------
 
-Install [ANTLR4][7]
+They both looked painfully complicated.  Maybe it was the XML.
+I'm used to the pleasent experience of [bundler][9].
 
-    export CLASSPATH=".:/usr/local/lib/antlr-4.0-complete.jar:$CLASSPATH"
-    alias antlr4='java -jar /usr/local/lib/antlr-4.0-complete.jar'
+Parser Generator
+----------------
 
-Generate and compile parser
-
-    antlr4 CFML.g4
-    javac *.java
+`build.sh` uses the included jar of [ANTLR4][7] to generate the
+lexer and parser.
 
 Thanks
 ------
@@ -65,3 +62,4 @@ References
 [6]: http://openbd.org/about/
 [7]: http://www.antlr.org/
 [8]: https://github.com/pirategaspard/cftag2cfscript
+[9]: http://bundler.io/
