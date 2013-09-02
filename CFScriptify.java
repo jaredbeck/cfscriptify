@@ -13,7 +13,7 @@ public class CFScriptify {
       CFMLLexer lexer = new CFMLLexer(charStream);
       CommonTokenStream tokens = new CommonTokenStream(lexer);
       CFMLParser parser = new CFMLParser(tokens);
-      ParseTree tree = parser.cfm();
+      ParseTree tree = parser.block();
       ParseTreeWalker walker = new ParseTreeWalker();
       walker.walk(new CFScriptifyListener(), tree);
     }

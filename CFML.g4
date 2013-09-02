@@ -3,7 +3,7 @@ grammar CFML;
 // Parser Rules
 // ============
 
-cfm : (cfcomment | line)* ;
+block : (cfcomment | tagIf | line)* ;
 
 line :
   tagSet
@@ -14,11 +14,17 @@ about it, but it must be implemented as a lexer rule, so that it can
 have higher precedence than the `WS` rule. */
 cfcomment : CFCOMMENT ;
 
+tagIf : TS condIf block tagElseIf* tagElse? ENDCFIF;
+tagElseIf : TS condElseIf block ;
+tagElse : TS 'else' TE block ;
+
+condIf : 'if' .*? TE ;
+condElseIf : 'elseif' .*? TE ;
+
 tagSet : TS 'set' assignment ;
 assignment : IDENTIFIER ASSIGNMENT ;
 
 tagAbort : TS 'abort' TE ;
-expression : literal ; // TODO
 literal : BOOLEAN_LITERAL | STRING_LITERAL ;
 
 // Lexer Rules
@@ -27,6 +33,8 @@ literal : BOOLEAN_LITERAL | STRING_LITERAL ;
 ASSIGNMENT : EQUALS .*? TE ;
 BOOLEAN_LITERAL : 'TRUE' | 'FALSE' | 'true' | 'false' ;
 CFCOMMENT : '<!---' .*? '--->' ;
+
+ENDCFIF : '</cfif>' ;
 
 TS : '<cf' ; // Tag Start
 TE : '>' ; // Tag End
