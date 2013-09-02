@@ -17,11 +17,19 @@ class Test
     expected = outfile.read
     pass = result == expected
     if (pass)
-      print "."
+      green "."
     else
-      puts "\nTest #{number.to_i} failed:"
+      red "\nTest #{number.to_i} failed:\n"
       system "diff -U 3 #{tmp_file_path} #{outfile.path} | tail +4"
     end
+  end
+
+  def green str
+    print "\e[32m" + str.to_s + "\e[0m"
+  end
+
+  def red str
+    print "\e[31m" + str.to_s + "\e[0m"
   end
 
   def tmp_file_path
