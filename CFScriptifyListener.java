@@ -19,18 +19,21 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	@Override public void enterTagIf(CFMLParser.TagIfContext ctx) {
 		String expr = ctxSubstr(ctx.condIf(), 2);
-		print(depth, "if (" + expr + ") {\n");
-		depth++;
+		print("if (" + expr + ") {\n");
+		entab();
 	}
 
 	@Override public void exitTagIf(CFMLParser.TagIfContext ctx) {
-		depth--;
-		printBlockClose();
+		detab();
+		print("}\n");
 	}
 
 	@Override public void enterTagElseIf(CFMLParser.TagElseIfContext ctx) {
+		detab();
 		String expr = ctxSubstr(ctx.condElseIf(), 6);
-		print(depth - 1, "}\nelse if (" + expr + ") {\n");
+		print("}\n");
+		print("else if (" + expr + ") {\n");
+		entab();
 	}
 
 	@Override public void exitTagElseIf(CFMLParser.TagElseIfContext ctx) {
@@ -38,37 +41,48 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	}
 
 	@Override public void enterTagElse(CFMLParser.TagElseContext ctx) {
-		print(depth - 1, "}\nelse {\n");
+		detab();
+		print("}\n");
+		print("else {\n");
+		entab();
 	}
 
 	@Override public void exitTagElse(CFMLParser.TagElseContext ctx) {
-		depth--;
+		/* nop */
 	}
 
 	@Override public void exitAssignment(CFMLParser.AssignmentContext ctx) {
 		String assignment = StringUtils.chop(ctx.ASSIGNMENT().getText());
-		print(depth, ctx.IDENTIFIER().getText() + " " + assignment);
+		print(ctx.IDENTIFIER().getText() + " " + assignment);
 	}
 
 	@Override public void enterCfcomment(CFMLParser.CfcommentContext ctx) {
-		print(depth, "/* " + getCFCommentInnerText(ctx.getText()) + " */\n");
+		print("/* " + getCFCommentInnerText(ctx.getText()) + " */\n");
 	}
 
 	@Override public void exitLine(CFMLParser.LineContext ctx) {
-		print(0, ";\n");
+		System.out.print(";\n");
 	}
 
 	@Override public void exitTagAbort(CFMLParser.TagAbortContext ctx) {
-		print(depth, "abort");
+		print("abort");
 	}
 
 	@Override public void exitLiteral(CFMLParser.LiteralContext ctx) {
 		if (ctx.BOOLEAN_LITERAL() != null) {
-			print(depth, ctx.BOOLEAN_LITERAL().getText());
+			print(ctx.BOOLEAN_LITERAL().getText());
 		}
 		else {
-			print(depth, ctx.STRING_LITERAL().getText());
+			print(ctx.STRING_LITERAL().getText());
 		}
+	}
+
+	private void entab() {
+		depth ++;
+	}
+
+	private void detab() {
+		if (depth > 0) { depth --; }
 	}
 
 	private String ctxSubstr(ParserRuleContext ctx, int start) {
@@ -79,12 +93,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		return c.substring(6, c.length() - 5);
 	}
 
-	private void print(int indentDepth, String s) {
-		String indents = StringUtils.repeat("\t", indentDepth);
+	private void print(String s) {
+		String indents = StringUtils.repeat("\t", depth);
 		System.out.print(indents + s);
-	}
-
-	private void printBlockClose() {
-		print(depth, "}\n");
 	}
 }
