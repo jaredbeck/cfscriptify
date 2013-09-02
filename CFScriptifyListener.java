@@ -17,8 +17,9 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	/* <cfif> */
 	@Override public void enterTagIf(CFMLParser.TagIfContext ctx) {
-		String expr = ctxSubstr(ctx.condIf(), 2);
+		String expr = ctxSubstr(ctx.CFIF().getText(), 6);
 		print("if (" + expr + ") {\n");
 		entab();
 	}
@@ -28,18 +29,16 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		print("}\n");
 	}
 
+	/* <cfelseif> */
 	@Override public void enterTagElseIf(CFMLParser.TagElseIfContext ctx) {
 		detab();
-		String expr = ctxSubstr(ctx.condElseIf(), 6);
+		String expr = ctxSubstr(ctx.CFELSEIF().getText(), 10);
 		print("}\n");
 		print("else if (" + expr + ") {\n");
 		entab();
 	}
 
-	@Override public void exitTagElseIf(CFMLParser.TagElseIfContext ctx) {
-		/* nop */
-	}
-
+	/* <cfelse> */
 	@Override public void enterTagElse(CFMLParser.TagElseContext ctx) {
 		detab();
 		print("}\n");
@@ -47,13 +46,9 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		entab();
 	}
 
-	@Override public void exitTagElse(CFMLParser.TagElseContext ctx) {
-		/* nop */
-	}
-
-	@Override public void exitAssignment(CFMLParser.AssignmentContext ctx) {
-		String assignment = StringUtils.chop(ctx.ASSIGNMENT().getText());
-		print(ctx.IDENTIFIER().getText() + " " + assignment);
+	/* <cfset> */
+	@Override public void enterTagSet(CFMLParser.TagSetContext ctx) {
+		print(ctxSubstr(ctx.getText(), 7));
 	}
 
 	@Override public void enterCfcomment(CFMLParser.CfcommentContext ctx) {
@@ -68,15 +63,6 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		print("abort");
 	}
 
-	@Override public void exitLiteral(CFMLParser.LiteralContext ctx) {
-		if (ctx.BOOLEAN_LITERAL() != null) {
-			print(ctx.BOOLEAN_LITERAL().getText());
-		}
-		else {
-			print(ctx.STRING_LITERAL().getText());
-		}
-	}
-
 	private void entab() {
 		depth ++;
 	}
@@ -85,8 +71,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		if (depth > 0) { depth --; }
 	}
 
-	private String ctxSubstr(ParserRuleContext ctx, int start) {
-		return StringUtils.chop(ctx.getText().substring(start));
+	private String ctxSubstr(String ctxText, int start) {
+		return StringUtils.chop(ctxText.substring(start));
 	}
 
 	private String getCFCommentInnerText(String c) {
