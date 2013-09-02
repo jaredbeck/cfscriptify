@@ -9,6 +9,9 @@ public class CFMLBaseListener implements CFMLListener {
 	@Override public void enterExpression(CFMLParser.ExpressionContext ctx) { }
 	@Override public void exitExpression(CFMLParser.ExpressionContext ctx) { }
 
+	@Override public void enterAssignment(CFMLParser.AssignmentContext ctx) { }
+	@Override public void exitAssignment(CFMLParser.AssignmentContext ctx) { }
+
 	@Override public void enterTagSet(CFMLParser.TagSetContext ctx) { }
 	@Override public void exitTagSet(CFMLParser.TagSetContext ctx) { }
 

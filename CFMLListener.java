@@ -6,6 +6,9 @@ public interface CFMLListener extends ParseTreeListener {
 	void enterExpression(CFMLParser.ExpressionContext ctx);
 	void exitExpression(CFMLParser.ExpressionContext ctx);
 
+	void enterAssignment(CFMLParser.AssignmentContext ctx);
+	void exitAssignment(CFMLParser.AssignmentContext ctx);
+
 	void enterTagSet(CFMLParser.TagSetContext ctx);
 	void exitTagSet(CFMLParser.TagSetContext ctx);
 

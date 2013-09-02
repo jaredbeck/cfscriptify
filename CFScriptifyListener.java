@@ -7,9 +7,13 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class CFScriptifyListener extends CFMLBaseListener {
-	@Override public void enterTagSet(CFMLParser.TagSetContext ctx) {
-    print(ctx.IDENTIFIER().getText() + " = ");
+
+	@Override public void exitAssignment(CFMLParser.AssignmentContext ctx) {
+		String assignment = StringUtils.chop(ctx.ASSIGNMENT().getText());
+		print(ctx.IDENTIFIER().getText() + " " + assignment);
 	}
 
 	@Override public void enterCfcomment(CFMLParser.CfcommentContext ctx) {

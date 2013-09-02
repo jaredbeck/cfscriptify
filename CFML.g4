@@ -14,7 +14,9 @@ about it, but it must be implemented as a lexer rule, so that it can
 have higher precedence than the `WS` rule. */
 cfcomment : CFCOMMENT ;
 
-tagSet : TS 'set' IDENTIFIER EQUALS expression TE ;
+tagSet : TS 'set' assignment ;
+assignment : IDENTIFIER ASSIGNMENT ;
+
 tagAbort : TS 'abort' TE ;
 expression : literal ; // TODO
 literal : BOOLEAN_LITERAL | STRING_LITERAL ;
@@ -22,9 +24,10 @@ literal : BOOLEAN_LITERAL | STRING_LITERAL ;
 // Lexer Rules
 // ===========
 
+ASSIGNMENT : EQUALS .*? TE ;
 BOOLEAN_LITERAL : 'TRUE' | 'FALSE' | 'true' | 'false' ;
 CFCOMMENT : '<!---' .*? '--->' ;
-EQUALS : '=' ;
+
 TS : '<cf' ; // Tag Start
 TE : '>' ; // Tag End
 
@@ -41,6 +44,8 @@ WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines, and formfeeds
 
 // Lexer Token Fragments
 // =====================
+
+fragment EQUALS : '=' ;
 
 fragment DoubleStringCharacter
   : ~('"')

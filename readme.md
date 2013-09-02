@@ -14,6 +14,8 @@ Given the following input file `01.cfm`
 
 Compile and run
 
+    cd cfscriptify
+    CLASSPATH=.:/usr/local/lib/antlr-4.0-complete.jar:commons-lang3-3.1.jar
     javac *.java
     java CFScriptify test/input/01.cfm
 
