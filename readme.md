@@ -65,6 +65,7 @@ Appendix A: Supported CFML Tags
 ### Supported
 
 cfabort
+cfbreak
 cfelse
 cfelseif
 cfif
@@ -84,7 +85,6 @@ cfscript equivalent.
 ### Not Supported Yet
 
 cfargument
-cfbreak
 cfcase
 cfcatch
 cfcomponent

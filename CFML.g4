@@ -4,13 +4,14 @@ grammar CFML;
 // ============
 
 block : (cfcomment | tagIf | tagLoop | tagScript | line)* ;
-line : tagAbort | tagInclude | tagSet ;
+line : tagAbort | tagBreak | tagInclude | tagSet ;
 
 /* `cfcomment` must be a parser rule, so that the listener will hear
 about it, but it must be implemented as a lexer rule, so that it can
 have higher precedence than the `WS` rule. */
 cfcomment : CFCOMMENT ;
 
+tagBreak : CFBREAK ;
 tagIf : CFIF block tagElseIf* tagElse? ENDCFIF ;
 tagElseIf : CFELSEIF block ;
 tagElse : CFELSE block ;
@@ -30,6 +31,7 @@ CFCOMMENT : '<!---' .*? '--->' ;
 
 // Tags with no attributes
 CFABORT : TS 'abort' TE ;
+CFBREAK : TS 'break' TE ;
 CFIF : TS 'if' .*? TE ;
 CFELSE : TS 'else' TE ;
 CFELSEIF : TS 'elseif' .*? TE ;
