@@ -18,21 +18,25 @@ Output line endings are LF, but CR and CRLF are acceptable as
 input.  Output is indented with tabs, but I'd welcome a pull
 request for spaces.
 
+### Sublime Text 2 Plugin
+
+Nothing polished yet, but you can use `docs/sublime/cfscriptify.py`
+as a starting point.
+
+1. Tools -> New Plugin ..
+1. Paste in `docs/sublime/cfscriptify.py`
+1. Update all the `/Users/jared` paths (sorry)
+1. Bind a key or just use sublime's python shell (ctrl-backtick)
+
 ### Apologies for not using ant or maven
 
 They both looked painfully complicated.  Maybe it was the XML.
-
-Parser Generator
-----------------
-
-`build.sh` uses the included jar of [ANTLR4][7] to generate the
-lexer and parser from `CFML.g4`.
 
 Thanks
 ------
 
 Thanks to the guys from [OpenBD][4] who wrote the [ANTLR3 grammer][5]
-for CFML, I'll be leaning on it heavily as I write an ANTLR4 grammar.
+for CFML, I'll be leaning on it heavily as I write an [ANTLR4][7] grammar.
 According to SVN blame, that was `andy` and `alan` (perhaps
 [Andy Wu and Alan Williamson][6]?).
 
