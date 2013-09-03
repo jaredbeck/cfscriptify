@@ -1,7 +1,7 @@
 CFScriptify
 ===========
 
-Converts CFML tags to cfscript using pure Java.
+Converts common CFML tags to cfscript using pure Java.
 
 Usage
 -----
@@ -50,19 +50,26 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (9)
+### Supported
 
 cfabort
 cfelse
 cfelseif
 cfif
 cfinclude
-cfloop
 cfscript
 cfset
 cfsilent
 
-### Not Supported Yet (20)
+### Partially supported
+
+[cfloop][9] is supported for list, array, and from/to/step.
+Support is planned for loop over query, structure, and condition.
+Loop over date range is rare, but wouldn't be too difficult to
+implement.  Finally, loop over file is rare and has no convenient
+cfscript equivalent.
+
+### Not Supported Yet
 
 cfargument
 cfbreak
@@ -85,7 +92,7 @@ cfswitch
 cfthrow
 cftry
 
-### No Plans to Support (118)
+### No Plans to Support
 
 These tags either do not have convenient cfscript equivalents, have
 complicated varients (eg. cffile), or are too rare to be worth the
@@ -219,3 +226,4 @@ cfzipparam
 [6]: http://openbd.org/about/
 [7]: http://www.antlr.org/
 [8]: https://github.com/pirategaspard/cftag2cfscript
+[9]: http://adobe.ly/14mmCe5
