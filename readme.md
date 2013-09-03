@@ -50,18 +50,19 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (8)
+### Supported (9)
 
 cfabort
 cfelse
 cfelseif
 cfif
+cfinclude
 cfloop
 cfscript
 cfset
 cfsilent
 
-### Not Supported Yet (21)
+### Not Supported Yet (20)
 
 cfargument
 cfbreak
@@ -74,7 +75,6 @@ cfdump
 cffinally
 cfflush
 cffunction
-cfinclude
 cflocation
 cflock
 cflog

@@ -17,6 +17,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	@Override public void enterTagInclude(CFMLParser.TagIncludeContext ctx) {
+		print("include " + ctx.STRING_LITERAL().getText());
+	}
+
 	/* <cfscript> */
 	@Override public void enterTagScript(CFMLParser.TagScriptContext ctx) {
 		String scr = StringUtils.substringBetween(ctx.CFSCRIPT().getText(), "<cfscript>", "</cfscript>");
