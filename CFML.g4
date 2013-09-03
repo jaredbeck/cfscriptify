@@ -38,19 +38,34 @@ CFSET : TS 'set' .*? TE ;
 ENDCFIF : TC 'if' TE ;
 ENDCFLOOP : TC 'loop' TE ;
 
-ATR_ARRAY : 'array' '="' .*? '"' ;
-ATR_FROM : 'from' '="' .*? '"' ;
-ATR_INDEX : 'index' '="' .*? '"' ;
-ATR_LIST : 'list' '="' .*? '"' ;
-ATR_STEP : 'step' '="' .*? '"' ;
-ATR_TO : 'to' '="' .*? '"' ;
+ATR_ARRAY : 'array' '=' STRING_LITERAL ;
+ATR_FROM : 'from' '=' STRING_LITERAL ;
+ATR_INDEX : 'index' '=' STRING_LITERAL ;
+ATR_LIST : 'list' '=' STRING_LITERAL ;
+ATR_STEP : 'step' '=' STRING_LITERAL ;
+ATR_TO : 'to' '=' STRING_LITERAL ;
 
 WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines, and formfeeds
 
 TS : '<cf' ; // Tag Start
 TE : '>' ; // Tag End
 
+STRING_LITERAL
+  : '"' DoubleStringCharacter* '"'
+  | '\'' SingleStringCharacter* '\''
+  ;
+
 // Lexer Fragments
 // ===============
+
+fragment DoubleStringCharacter
+  : ~('"')
+  | '""'
+  ;
+
+fragment SingleStringCharacter
+  : ~('\'')
+  | '\'\''
+  ;
 
 fragment TC : '</cf' ; // Tag Close
