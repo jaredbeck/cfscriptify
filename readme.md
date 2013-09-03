@@ -44,7 +44,7 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (6)
+### Supported (7)
 
 cfabort
 cfelse
@@ -52,8 +52,9 @@ cfelseif
 cfif
 cfloop
 cfset
+cfsilent
 
-### Not Supported Yet (23)
+### Not Supported Yet (22)
 
 cfargument
 cfbreak
@@ -74,7 +75,6 @@ cfparam
 cfrethrow
 cfreturn
 cfscript
-cfsilent
 cfswitch
 cfthrow
 cftry

@@ -45,15 +45,24 @@ ATR_LIST : 'list' '=' STRING_LITERAL ;
 ATR_STEP : 'step' '=' STRING_LITERAL ;
 ATR_TO : 'to' '=' STRING_LITERAL ;
 
-WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines, and formfeeds
-
-TS : '<cf' ; // Tag Start
 TE : '>' ; // Tag End
 
 STRING_LITERAL
   : '"' DoubleStringCharacter* '"'
   | '\'' SingleStringCharacter* '\''
   ;
+
+/*
+Lexer Rules: Skips
+------------------
+
+Skip whitespace (spaces, tabs, newlines, and formfeeds) unless
+a rule above consumes it first.  Skip <cfsilent> because cfscript
+is always silent.
+*/
+
+WS : [ \t\r\n\f]+ -> skip ;
+CFSILENT : (TS | TC) 'silent' TE -> skip ;
 
 // Lexer Fragments
 // ===============
@@ -69,3 +78,4 @@ fragment SingleStringCharacter
   ;
 
 fragment TC : '</cf' ; // Tag Close
+fragment TS : '<cf' ; // Tag Start
