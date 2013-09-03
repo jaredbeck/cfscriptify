@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 public class CFScriptifyListener extends CFMLBaseListener {
 
@@ -33,15 +34,20 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfloop from="" to="" index="" step=""> */
 	@Override public void enterTagLoopFrom(CFMLParser.TagLoopFromContext ctx) {
-		String from = ctxSubstr(firstTextIn(ctx.ATR_FROM()), 6);
-		String to = ctxSubstr(firstTextIn(ctx.ATR_TO()), 4);
-		String index = ctxSubstr(firstTextIn(ctx.ATR_INDEX()), 7);
-		String step = ctxSubstr(firstTextIn(ctx.ATR_STEP()), 6);
+		String from = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_FROM()), 6));
+		String to = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_TO()), 4));
+		String index = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_INDEX()), 7));
+		String step = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_STEP()), 6));
+		if (step.length() == 0) { step = "1"; }
+		String op = loopComparison(from, to, step);
+
 		String begin = String.format("%s = %s", index, from);
-		String middle = String.format("%s %s %s", descope(index), loopComparison(from, to), to);
-		String end = descope(index) + loopCrementor(from, to);
+		String middle = String.format("%s %s %s", descope(index), op, to);
+		String end = stepStmt(descope(index), step);
+
 		print(String.format("for (%s; %s; %s) {\n", begin, middle, end));
 		entab();
+		if (op == "NEQ") { printWarning("is NEQ what you wanted?"); }
 	}
 
 	@Override public void exitTagLoopFrom(CFMLParser.TagLoopFromContext ctx) {
@@ -145,6 +151,23 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth ++;
 	}
 
+	private String loopComparison(String from, String to, String step) {
+		boolean direction;
+		if (NumberUtils.isNumber(step)) {
+			direction = Double.parseDouble(step) > 0; // true means ascending
+		}
+		else if (NumberUtils.isNumber(from) && NumberUtils.isNumber(to)) {
+			direction = Double.parseDouble(from) < Double.parseDouble(to);
+		}
+		else {
+			/* If none of the attributes are numeric, we can't determine
+			the direction.  The best possible guess is NEQ.  Thankfully,
+			a non-numeric step is quite uncommon. */
+			return "NEQ";
+		}
+		return direction ? "LTE" : "GTE";
+	}
+
 	private int firstLineOffset(String[] lines) {
 		return lines.length == 0 ? 0 : countLeadingWS(lines[0]);
 	}
@@ -162,28 +185,25 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		return c.substring(6, c.length() - 5);
 	}
 
-	private boolean loopCompDirection(String a, String b) {
-		try {
-			int ia = Integer.parseInt(a);
-			int ib = Integer.parseInt(b);
-			return ia < ib;
-		}
-		catch (NumberFormatException e) {
-			return false;
-		}
-	}
-
-	private String loopComparison(String from, String to) {
-		return loopCompDirection(from, to) ? "LTE" : "GTE";
-	}
-
-	private String loopCrementor(String from, String to) {
-		return loopCompDirection(from, to) ? "++" : "--";
-	}
-
 	private void print(String s) {
 		String indents = StringUtils.repeat("\t", depth);
 		System.out.print(indents + s);
+	}
+
+	private void printWarning(String s) {
+		print("/* cfscriptify warning: " + s + " */\n");
+	}
+
+	private String stepStmt(String index, String step) {
+		try {
+			int s = Integer.parseInt(step);
+			if (s == 1) { return index + "++"; }
+			else if (s == -1) { return index + "--"; }
+			else { return index + " += " + String.valueOf(s); }
+		}
+		catch (NumberFormatException e) {
+			return index + " += " + step;
+		}
 	}
 
 	private String trimOctothorps(String s) {
