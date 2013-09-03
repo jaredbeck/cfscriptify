@@ -3,11 +3,8 @@ grammar CFML;
 // Parser Rules
 // ============
 
-block : (cfcomment | tagIf | tagLoop | line)* ;
-
-line :
-  tagSet
-  | tagAbort ;
+block : (cfcomment | tagIf | tagLoop | tagScript | line)* ;
+line : tagAbort | tagSet ;
 
 /* `cfcomment` must be a parser rule, so that the listener will hear
 about it, but it must be implemented as a lexer rule, so that it can
@@ -21,6 +18,7 @@ tagLoop : (tagLoopList | tagLoopArray | tagLoopFrom) ;
 tagLoopArray : CFLOOP (ATR_ARRAY | ATR_INDEX)* TE block ENDCFLOOP ;
 tagLoopFrom : CFLOOP (ATR_FROM | ATR_TO | ATR_INDEX | ATR_STEP)* TE block ENDCFLOOP ;
 tagLoopList : CFLOOP (ATR_LIST | ATR_INDEX)* TE block ENDCFLOOP ;
+tagScript : CFSCRIPT ;
 tagSet : CFSET ;
 tagAbort : CFABORT ;
 
@@ -33,10 +31,12 @@ CFIF : TS 'if' .*? TE ;
 CFELSE : TS 'else' TE ;
 CFELSEIF : TS 'elseif' .*? TE ;
 CFLOOP : TS 'loop' ;
+CFSCRIPT : TS 'script' TE .*? ENDCFSCRIPT ;
 CFSET : TS 'set' .*? TE ;
 
 ENDCFIF : TC 'if' TE ;
 ENDCFLOOP : TC 'loop' TE ;
+ENDCFSCRIPT : TC 'script' TE ;
 
 ATR_ARRAY : 'array' '=' STRING_LITERAL ;
 ATR_FROM : 'from' '=' STRING_LITERAL ;

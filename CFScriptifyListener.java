@@ -1,4 +1,6 @@
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -13,6 +15,16 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	public void CFScriptifyListener() {
 		depth = 0;
+	}
+
+	/* <cfscript> */
+	@Override public void enterTagScript(CFMLParser.TagScriptContext ctx) {
+		String scr = StringUtils.substringBetween(ctx.CFSCRIPT().getText(), "<cfscript>", "</cfscript>");
+		String[] lines = StringUtils.split(scr, "\r\n");
+		int offset = firstLineOffset(lines);
+		for (int i = 0; i < lines.length; i++) {
+			print(lines[i].substring(offset) + "\n");
+		}
 	}
 
 	/* <cfloop from="" to="" index="" step=""> */
@@ -105,6 +117,12 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		print("abort");
 	}
 
+	private int countLeadingWS(String s) {
+		Pattern pattern = Pattern.compile("^\\s*");
+		Matcher matcher = pattern.matcher(s);
+		return matcher.find() ? matcher.end() : 0;
+	}
+
 	private String ctxSubstr(String ctxText, int start) {
 		if (ctxText.length() <= start) { return ""; }
 		return StringUtils.chop(ctxText.substring(start));
@@ -121,6 +139,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	private void entab() {
 		depth ++;
+	}
+
+	private int firstLineOffset(String[] lines) {
+		return lines.length == 0 ? 0 : countLeadingWS(lines[0]);
 	}
 
 	private String firstTextIn(List<TerminalNode> l) {

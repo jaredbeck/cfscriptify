@@ -8,9 +8,15 @@ Usage
 
     ./build.sh
     ./test/test.rb
-    ./run.sh test/input/01.cfm
+    ./run.sh my.cfm
 
 See Appendix A for a list of supported CFML tags.
+
+### Whitespace
+
+Output line endings are LF, but CR and CRLF are acceptable as
+input.  Output is indented with tabs, but I'd welcome a pull
+request for spaces.
 
 ### Apologies for not using ant or maven
 
@@ -20,7 +26,7 @@ Parser Generator
 ----------------
 
 `build.sh` uses the included jar of [ANTLR4][7] to generate the
-lexer and parser.
+lexer and parser from `CFML.g4`.
 
 Thanks
 ------
@@ -44,17 +50,18 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (7)
+### Supported (8)
 
 cfabort
 cfelse
 cfelseif
 cfif
 cfloop
+cfscript
 cfset
 cfsilent
 
-### Not Supported Yet (22)
+### Not Supported Yet (21)
 
 cfargument
 cfbreak
@@ -74,7 +81,6 @@ cflog
 cfparam
 cfrethrow
 cfreturn
-cfscript
 cfswitch
 cfthrow
 cftry
