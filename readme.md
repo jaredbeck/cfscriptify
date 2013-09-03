@@ -6,28 +6,15 @@ Converts CFML tags to cfscript using pure Java.
 Usage
 -----
 
-Given the following input file `01.cfm`
-
-    <cfset x = 'foo'>
-    <cfset x = true>
-    <cfabort>
-
-Compile and run
-
     ./build.sh
+    ./test/test.rb
     ./run.sh test/input/01.cfm
 
-Should produce
+See Appendix A for a list of supported CFML tags.
 
-    x = 'foo';
-    x = true;
-    abort;
-
-Apologies for not using ant or maven
-------------------------------------
+### Apologies for not using ant or maven
 
 They both looked painfully complicated.  Maybe it was the XML.
-I'm used to the pleasent experience of [bundler][9].
 
 Parser Generator
 ----------------
@@ -54,6 +41,170 @@ References
     * [/trunk/src/com/naryx/tagfusion/cfm/parser/CFML.g][5] (ANTLR3 grammer)
 * [cftag2cfscript][8] (similar project, but written in ColdFusion)
 
+Appendix A: Supported CFML Tags
+-------------------------------
+
+### Supported (6)
+
+cfabort
+cfelse
+cfelseif
+cfif
+cfloop
+cfset
+
+### Not Supported Yet (23)
+
+cfargument
+cfbreak
+cfcase
+cfcatch
+cfcomponent
+cfcontinue
+cfdefaultcase
+cfdump
+cffinally
+cfflush
+cffunction
+cfinclude
+cflocation
+cflock
+cflog
+cfparam
+cfrethrow
+cfreturn
+cfscript
+cfsilent
+cfswitch
+cfthrow
+cftry
+
+### No Plans to Support (118)
+
+These tags either do not have convenient cfscript equivalents, have
+complicated varients (eg. cffile), or are too rare to be worth the
+trouble.  Pull requests, however, are welcome.
+
+cfapplication
+cfassociate
+cfajaximport
+cfajaxproxy
+cfapplet
+cfcache
+cfcalendar
+cfchart
+cfchartdata
+cfchartseries
+cfcontent
+cfcol
+cfcollection
+cfcookie
+cfdbinfo
+cfdirectory
+cfdiv
+cfdocument
+cfdocumentitem
+cfdocumentsection
+cferror
+cfexchangecalendar
+cfexchangeconnection
+cfexchangecontact
+cfexchangefilter
+cfexchangemail
+cfexchangetask
+cfexecute
+cfexit
+cffeed
+cffile
+cffileupload
+cfform
+cfformgroup
+cfformitem
+cfftp
+cfgrid
+cfgridcolumn
+cfgridrow
+cfgridupdate
+cfheader
+cfhtmlhead
+cfhttp
+cfhttpparam
+cfimage
+cfimap
+cfimport
+cfindex
+cfinput
+cfinsert
+cfinterface
+cfinvoke
+cfinvokeargument
+cflayout
+cflayoutarea
+cfldap
+cflogin
+cfloginuser
+cflogout
+cfmail
+cfmailparam
+cfmailpart
+cfmap
+cfmapitem
+cfmediaplayer
+cfmenu
+cfmenuitem
+cfmessagebox
+cfNTauthenticate
+cfobject
+cfobjectcache
+cfoutput
+cfpdf
+cfpdfform
+cfpdfformparam
+cfpdfparam
+cfpdfsubform
+cfpod
+cfpop
+cfpresentation
+cfpresentationslide
+cfpresenter
+cfprint
+cfprocessingdirective
+cfprocparam
+cfprocresult
+cfprogressbar
+cfproperty
+cfquery
+cfqueryparam
+cfregistry
+cfreport
+cfreportparam
+cfsavecontent
+cfschedule
+cfsearch
+cfselect
+cfsetting
+cfsharepoint
+cfslider
+cfspreadsheet
+cfsprydataset
+cfstoredproc
+cftable
+cftextarea
+cfthread
+cftimer
+cftooltip
+cftrace
+cftransaction
+cftree
+cftreeitem
+cfupdate
+cfwddx
+cfwindow
+cfxml
+cfzip
+cfzipparam
+
+
 [1]: http://www.antlr.org/api/Java/index.html
 [2]: http://stackoverflow.com/questions/14667781/antlr-4-and-ast-visitors
 [3]: http://t7263.codeinpro.us/q/515024e9e8432c0426262341
@@ -62,4 +213,3 @@ References
 [6]: http://openbd.org/about/
 [7]: http://www.antlr.org/
 [8]: https://github.com/pirategaspard/cftag2cfscript
-[9]: http://bundler.io/
