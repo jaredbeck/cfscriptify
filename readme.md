@@ -26,7 +26,11 @@ as a starting point.
 1. Tools -> New Plugin ..
 1. Paste in `docs/sublime/cfscriptify.py`
 1. Update all the `/Users/jared` paths (sorry)
-1. Bind a key or just use sublime's python shell (ctrl-backtick)
+1. Select some CFML
+1. In sublime's python shell (ctrl-backtick)
+    * `view.run_command("cfscriptify")`
+1. Or, bind a key, eg.
+    * `{ "keys": ["ctrl+alt+r"], "command": "cfscriptify" }`
 
 ### Apologies for not using ant or maven
 
@@ -44,12 +48,16 @@ References
 ----------
 
 * [ANTLR 4 Runtime API][1]
-* Useful examples:
     * [ANTLR 4 and AST visitors][2]
     * [ANTLR 4 tree inject/rewrite operator][3]
 * [openbd.org][4]
     * [/trunk/src/com/naryx/tagfusion/cfm/parser/CFML.g][5] (ANTLR3 grammer)
 * [cftag2cfscript][8] (similar project, but written in ColdFusion)
+* Sublime Text 2
+    * [Plugins - Sublime Text Unofficial Documentation][13]
+    * [randomize.py][10] (example of replacing the selected text)
+    * [Python - store output of subprocess.Popen call in a string][11]
+    * [Calling an external command in Python][12]
 
 Appendix A: Supported CFML Tags
 -------------------------------
@@ -231,3 +239,7 @@ cfzipparam
 [7]: http://www.antlr.org/
 [8]: https://github.com/pirategaspard/cftag2cfscript
 [9]: http://adobe.ly/14mmCe5
+[10]: https://gist.github.com/dtao/2726609
+[11]: http://stackoverflow.com/questions/2502833/python-store-output-of-subprocess-popen-call-in-a-string
+[12]: http://stackoverflow.com/questions/89228/calling-an-external-command-in-python
+[13]: http://docs.sublimetext.info/en/latest/extensibility/plugins.html
