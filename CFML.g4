@@ -4,7 +4,7 @@ grammar CFML;
 // ============
 
 block : (cfcomment | tagIf | tagLoop | tagScript | line)* ;
-line : tagAbort | tagBreak | tagInclude | tagSet ;
+line : tagAbort | tagBreak | tagInclude | tagParam | tagSet ;
 
 /* `cfcomment` must be a parser rule, so that the listener will hear
 about it, but it must be implemented as a lexer rule, so that it can
@@ -20,6 +20,7 @@ tagLoop : (tagLoopList | tagLoopArray | tagLoopFrom) ;
 tagLoopArray : CFLOOP (ATR_ARRAY | ATR_INDEX)* TE block ENDCFLOOP ;
 tagLoopFrom : CFLOOP (ATR_FROM | ATR_TO | ATR_INDEX | ATR_STEP)* TE block ENDCFLOOP ;
 tagLoopList : CFLOOP (ATR_LIST | ATR_INDEX)* TE block ENDCFLOOP ;
+tagParam : CFPARAM ;
 tagScript : CFSCRIPT ;
 tagSet : CFSET ;
 tagAbort : CFABORT ;
@@ -35,12 +36,14 @@ CFBREAK : TS 'break' TE ;
 CFIF : TS 'if' .*? TE ;
 CFELSE : TS 'else' TE ;
 CFELSEIF : TS 'elseif' .*? TE ;
+
 CFSCRIPT : TS 'script' TE .*? ENDCFSCRIPT ;
 CFSET : TS 'set' .*? TE ;
 
 // Tags with attributes (notice lack of TE)
 CFINCLUDE : TS 'include' ;
 CFLOOP : TS 'loop' ;
+CFPARAM : TS 'param' .*? TE ;
 
 // Closing tags
 ENDCFIF : TC 'if' TE ;

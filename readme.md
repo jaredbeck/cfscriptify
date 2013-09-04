@@ -70,6 +70,7 @@ cfelse
 cfelseif
 cfif
 cfinclude
+cfparam
 cfscript
 cfset
 cfsilent
@@ -97,7 +98,6 @@ cffunction
 cflocation
 cflock
 cflog
-cfparam
 cfrethrow
 cfreturn
 cfswitch

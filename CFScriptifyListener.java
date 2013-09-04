@@ -18,6 +18,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	@Override public void enterTagParam(CFMLParser.TagParamContext ctx) {
+		print("param" + ctxSubstr(ctx.CFPARAM().getText(), 8));
+	}
+
 	@Override public void enterTagBreak(CFMLParser.TagBreakContext ctx) {
 		print("break");
 	}
