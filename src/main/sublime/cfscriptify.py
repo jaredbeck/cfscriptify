@@ -3,7 +3,7 @@ import subprocess
 
 class CfscriptifyCommand(sublime_plugin.TextCommand):
   def run(self, edit):
-    cfs_path = "/Users/jared/git/cfscriptify/run.sh"
+    cfs_path = "/Users/jared/git/cfscriptify/bin/run.sh"
     tmp_file_path = "/tmp/cfscriptify_sublime_plugin.txt"
     selection = self.view.sel()
     for region in selection:

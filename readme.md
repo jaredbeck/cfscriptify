@@ -6,9 +6,9 @@ Converts common CFML tags to cfscript using pure Java.
 Usage
 -----
 
-    ./build.sh
-    ./test/test.rb
-    ./run.sh my.cfm
+    bin/build.sh
+    src/test/test.rb
+    bin/run.sh my.cfm
 
 See Appendix A for a list of supported CFML tags.
 

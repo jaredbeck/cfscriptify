@@ -12,7 +12,7 @@ class Test
   end
 
   def run
-    system "./run.sh #{infile.path} > #{tmp_file_path}"
+    system "bin/run.sh #{infile.path} > #{tmp_file_path}"
     result = File.read(tmp_file_path)
     expected = outfile.read
     pass = result == expected
@@ -38,8 +38,8 @@ class Test
 end
 
 class TestSuite
-  INPUTS = 'test/input'
-  OUTPUTS = 'test/output'
+  INPUTS = 'src/test/input'
+  OUTPUTS = 'src/test/output'
 
   def run
     tests.map(&:run)
