@@ -24,7 +24,7 @@ Nothing polished yet, but you can use `docs/sublime/cfscriptify.py`
 as a starting point.
 
 1. Tools -> New Plugin ..
-1. Paste in `docs/sublime/cfscriptify.py`
+1. Paste in `src/sublime/cfscriptify.py`
 1. Update all the `/Users/jared` paths (sorry)
 1. Select some CFML
 1. In sublime's python shell (ctrl-backtick)
