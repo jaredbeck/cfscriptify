@@ -32,18 +32,6 @@ as a starting point.
 1. Or, bind a key, eg.
     * `{ "keys": ["ctrl+alt+r"], "command": "cfscriptify" }`
 
-### Apologies for not using ant or maven
-
-They both looked painfully complicated.  Maybe it was the XML.
-
-Thanks
-------
-
-Thanks to the guys from [OpenBD][4] who wrote the [ANTLR3 grammer][5]
-for CFML, I'll be leaning on it heavily as I write an [ANTLR4][7] grammar.
-According to SVN blame, that was `andy` and `alan` (perhaps
-[Andy Wu and Alan Williamson][6]?).
-
 References
 ----------
 
