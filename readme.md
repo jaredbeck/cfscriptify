@@ -66,14 +66,18 @@ Appendix A: Supported CFML Tags
 
 cfabort
 cfbreak
+cfcatch
 cfelse
 cfelseif
 cfif
 cfinclude
 cfparam
+cfrethrow
 cfscript
 cfset
 cfsilent
+cfthrow
+cftry
 
 ### Partially supported
 
@@ -87,7 +91,6 @@ cfscript equivalent.
 
 cfargument
 cfcase
-cfcatch
 cfcomponent
 cfcontinue
 cfdefaultcase
@@ -98,11 +101,8 @@ cffunction
 cflocation
 cflock
 cflog
-cfrethrow
 cfreturn
 cfswitch
-cfthrow
-cftry
 
 ### No Plans to Support
 

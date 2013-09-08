@@ -18,6 +18,41 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	/* <cfthrow> */
+	@Override public void enterTagThrow(CFMLParser.TagThrowContext ctx) {
+		String args = ctxSubstr(ctx.CFTHROW().getText(), 9);
+		print("Throw(" + args + ")");
+	}
+
+	/* <cfrethrow> */
+	@Override public void enterTagRethrow(CFMLParser.TagRethrowContext ctx) {
+		print("rethrow");
+	}
+
+	/* <cfcatch type="foo"> */
+	@Override public void enterTagCatch(CFMLParser.TagCatchContext ctx) {
+		TerminalNode atrType = ctx.STRING_LITERAL();
+		String type = (atrType == null) ? "any" : dequote(atrType.getText());
+		print("catch(" + type + " cfcatch) {\n");
+		entab();
+	}
+
+	@Override public void exitTagCatch(CFMLParser.TagCatchContext ctx) {
+		detab();
+		print("}\n");
+	}
+
+	/* <cftry> */
+	@Override public void enterTagTry(CFMLParser.TagTryContext ctx) {
+		print("try {\n");
+		entab();
+	}
+
+	@Override public void exitTagTry(CFMLParser.TagTryContext ctx) {
+		detab();
+		print("}\n");
+	}
+
 	@Override public void enterTagParam(CFMLParser.TagParamContext ctx) {
 		print("param" + ctxSubstr(ctx.CFPARAM().getText(), 8));
 	}
@@ -153,6 +188,12 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	private void detab() {
 		if (depth > 0) { depth --; }
+	}
+
+	private String dequote(String str) {
+		String q = str.substring(0, 1);
+		String esc = StringUtils.repeat(q, 2);
+		return StringUtils.strip(str, q).replace(esc, q);
 	}
 
 	private void entab() {
