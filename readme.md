@@ -50,11 +50,12 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (15)
+### Supported (17)
 
 cfabort
 cfbreak
 cfcatch
+cfdefaultcase
 cfelse
 cfelseif
 cffinally
@@ -65,10 +66,13 @@ cfrethrow
 cfscript
 cfset
 cfsilent
+cfswitch
 cfthrow
 cftry
 
-### Partially supported (1)
+### Partially supported (2)
+
+[cfcase][14] is supported for single values.  List values are not supported yet.
 
 [cfloop][9] is supported for list, array, and from/to/step.
 Support is planned for loop over query, structure, and condition.
@@ -76,13 +80,11 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (13)
+### Not Supported Yet (10)
 
 cfargument
-cfcase
 cfcomponent
 cfcontinue
-cfdefaultcase
 cfdump
 cfflush
 cffunction
@@ -90,7 +92,6 @@ cflocation
 cflock
 cflog
 cfreturn
-cfswitch
 
 ### No Plans to Support (118)
 
@@ -231,3 +232,4 @@ cfzipparam
 [11]: http://stackoverflow.com/questions/2502833/python-store-output-of-subprocess-popen-call-in-a-string
 [12]: http://stackoverflow.com/questions/89228/calling-an-external-command-in-python
 [13]: http://docs.sublimetext.info/en/latest/extensibility/plugins.html
+[14]: http://adobe.ly/SGHQR1

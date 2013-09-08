@@ -18,6 +18,46 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	/* <cfswitch> */
+	@Override public void enterTagSwitch(CFMLParser.TagSwitchContext ctx) {
+		String expression = trimOctothorps(dequote(ctx.STRING_LITERAL().getText()));
+		print("switch (" + expression + ") {\n");
+		entab();
+	}
+
+	@Override public void exitTagSwitch(CFMLParser.TagSwitchContext ctx) {
+		detab();
+		print("}\n");
+	}
+
+	/* <cfcase> */
+	@Override public void enterTagCase(CFMLParser.TagCaseContext ctx) {
+		String value = trimOctothorps(ctx.STRING_LITERAL().getText());
+		print("case " + value + ":\n");
+		entab();
+	}
+
+	/* Add a break statement to every `case` to prevent fallthrough.
+	".. if you omit [break], ColdFusion executes all the statements
+	in the following case statement, even if that case is false. In
+	nearly all circumstances, this is not what you want to do."
+	[Using switch and case statements](http://adobe.ly/TQLp4t) */
+	@Override public void exitTagCase(CFMLParser.TagCaseContext ctx) {
+		print("break;\n");
+		detab();
+	}
+
+	/* <cfdefaultcase> */
+	@Override public void enterTagDefaultCase(CFMLParser.TagDefaultCaseContext ctx) {
+		print("default:\n");
+		entab();
+	}
+
+	@Override public void exitTagDefaultCase(CFMLParser.TagDefaultCaseContext ctx) {
+		detab();
+	}
+
+
 	/* <cffinally> */
 	@Override public void enterTagFinally(CFMLParser.TagFinallyContext ctx) {
 		print("finally {\n");

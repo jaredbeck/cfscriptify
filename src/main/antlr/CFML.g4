@@ -10,6 +10,7 @@ blockTag
   | tagIf
   | tagLoop
   | tagScript
+  | tagSwitch
   | tagTry
   ;
 
@@ -47,6 +48,10 @@ tagTry : CFTRY block tagCatch* tagFinally? ENDCFTRY ;
 tagCatch : CFCATCH ('type' '=' STRING_LITERAL)? TE block ENDCFCATCH ;
 tagRethrow : CFRETHROW ;
 
+tagSwitch : CFSWITCH 'expression' '=' STRING_LITERAL TE tagCase* tagDefaultCase? ENDCFSWITCH ;
+tagCase   : CFCASE 'value' '=' STRING_LITERAL TE block ENDCFCASE ;
+tagDefaultCase : CFDEFAULTCASE block ENDCFDEFAULTCASE ;
+
 // Lexer Rules
 // ===========
 
@@ -55,6 +60,7 @@ CFCOMMENT : '<!---' .*? '--->' ;
 // Tags with no attributes or expressions
 CFABORT     : TS 'abort' TE ;
 CFBREAK     : TS 'break' TE ;
+CFDEFAULTCASE : TS 'defaultcase' TE ;
 CFELSE      : TS 'else' TE ;
 CFFINALLY   : TS 'finally' TE ;
 CFRETHROW   : TS 'rethrow' TE ;
@@ -66,21 +72,26 @@ CFELSEIF    : TS 'elseif' .*? TE ;
 CFSET       : TS 'set' .*? TE ;
 
 // Tags with attributes
+CFCASE      : TS 'case' ;
 CFCATCH     : TS 'catch' ;
 CFINCLUDE   : TS 'include' ;
 CFLOOP      : TS 'loop' ;
 CFPARAM     : TS 'param' .*? TE ;
+CFSWITCH    : TS 'switch' ;
 CFTHROW     : TS 'throw' .*? TE ;
 
 // Tags with unparsed blocks
 CFSCRIPT    : TS 'script' TE .*? ENDCFSCRIPT ;
 
 // Closing tags
+ENDCFCASE   : TC 'case' TE ;
 ENDCFCATCH  : TC 'catch' TE ;
+ENDCFDEFAULTCASE : TC 'defaultcase' TE ;
 ENDCFFINALLY : TC 'finally' TE ;
 ENDCFIF     : TC 'if' TE ;
 ENDCFLOOP   : TC 'loop' TE ;
 ENDCFSCRIPT : TC 'script' TE ;
+ENDCFSWITCH : TC 'switch' TE ;
 ENDCFTRY    : TC 'try' TE ;
 
 // Attributes
