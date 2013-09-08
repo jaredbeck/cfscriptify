@@ -7,7 +7,7 @@ Usage
 -----
 
     bin/build.sh
-    src/test/test.rb
+    bin/test.rb
     bin/run.sh my.cfm
 
 See Appendix A for a list of supported CFML tags.
