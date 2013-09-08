@@ -62,7 +62,7 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported
+### Supported (14)
 
 cfabort
 cfbreak
@@ -79,7 +79,7 @@ cfsilent
 cfthrow
 cftry
 
-### Partially supported
+### Partially supported (1)
 
 [cfloop][9] is supported for list, array, and from/to/step.
 Support is planned for loop over query, structure, and condition.
@@ -87,7 +87,7 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet
+### Not Supported Yet (14)
 
 cfargument
 cfcase
@@ -104,7 +104,7 @@ cflog
 cfreturn
 cfswitch
 
-### No Plans to Support
+### No Plans to Support (118)
 
 These tags either do not have convenient cfscript equivalents, have
 complicated varients (eg. cffile), or are too rare to be worth the

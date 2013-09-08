@@ -162,7 +162,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		print("/* " + getCFCommentInnerText(ctx.getText()) + " */\n");
 	}
 
-	@Override public void exitLine(CFMLParser.LineContext ctx) {
+	@Override public void exitLineTag(CFMLParser.LineTagContext ctx) {
 		System.out.print(";\n");
 	}
 

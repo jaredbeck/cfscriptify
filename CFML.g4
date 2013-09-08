@@ -3,16 +3,25 @@ grammar CFML;
 // Parser Rules
 // ============
 
-block : (cfcomment | tagIf | tagLoop | tagScript | tagTry | line)* ;
+block : (blockTag | lineTag)* ;
 
-line
+blockTag
+  : cfcomment
+  | tagIf
+  | tagLoop
+  | tagScript
+  | tagTry
+  ;
+
+lineTag
   : tagAbort
   | tagBreak
   | tagInclude
   | tagParam
   | tagRethrow
   | tagSet
-  | tagThrow ;
+  | tagThrow
+  ;
 
 /* `cfcomment` must be a parser rule, so that the listener will hear
 about it, but it must be implemented as a lexer rule, so that it can
