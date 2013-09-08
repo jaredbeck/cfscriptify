@@ -2,7 +2,7 @@
 set -e
 
 function cfscriptify {
-  local classpath="classes:antlr-4.0-complete.jar:commons-lang3-3.1.jar:"
+  local classpath="target:antlr-4.0-complete.jar:commons-lang3-3.1.jar:"
   java -classpath "$classpath" CFScriptify "$@"
 }
 

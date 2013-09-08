@@ -6,13 +6,15 @@ function clean {
 }
 
 function generate_parser {
-  java -jar antlr-4.0-complete.jar src/CFML.g4
+  java -jar antlr-4.0-complete.jar src/main/antlr/CFML.g4
 }
 
 function compile {
-  mkdir classes
-  local classpath="classes:antlr-4.0-complete.jar:commons-lang3-3.1.jar"
-  javac -sourcepath src -classpath "$classpath" src/*.java -d classes
+  local main="src/main"
+  local clspth="target:antlr-4.0-complete.jar:commons-lang3-3.1.jar"
+  local srcpth="$main/antlr:$main/java"
+  local opts="-sourcepath $srcpth -classpath $clspth -d target"
+  javac $opts $main/java/*.java
 }
 
 clean
