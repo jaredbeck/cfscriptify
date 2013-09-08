@@ -7,4 +7,7 @@ try {
 	catch(any cfcatch) {
 		abort;
 	}
+	finally {
+		foo = "bar";
+	}
 }

@@ -32,6 +32,7 @@ tagBreak : CFBREAK ;
 tagIf : CFIF block tagElseIf* tagElse? ENDCFIF ;
 tagElseIf : CFELSEIF block ;
 tagElse : CFELSE block ;
+tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE 'template' '=' STRING_LITERAL TE ;
 tagLoop : (tagLoopList | tagLoopArray | tagLoopFrom) ;
 tagLoopArray : CFLOOP (ATR_ARRAY | ATR_INDEX)* TE block ENDCFLOOP ;
@@ -42,7 +43,7 @@ tagScript : CFSCRIPT ;
 tagSet : CFSET ;
 tagThrow : CFTHROW ;
 tagAbort : CFABORT ;
-tagTry : CFTRY block tagCatch* ENDCFTRY ;
+tagTry : CFTRY block tagCatch* tagFinally? ENDCFTRY ;
 tagCatch : CFCATCH ('type' '=' STRING_LITERAL)? TE block ENDCFCATCH ;
 tagRethrow : CFRETHROW ;
 
@@ -55,6 +56,7 @@ CFCOMMENT : '<!---' .*? '--->' ;
 CFABORT     : TS 'abort' TE ;
 CFBREAK     : TS 'break' TE ;
 CFELSE      : TS 'else' TE ;
+CFFINALLY   : TS 'finally' TE ;
 CFRETHROW   : TS 'rethrow' TE ;
 CFTRY       : TS 'try' TE ;
 
@@ -75,6 +77,7 @@ CFSCRIPT    : TS 'script' TE .*? ENDCFSCRIPT ;
 
 // Closing tags
 ENDCFCATCH  : TC 'catch' TE ;
+ENDCFFINALLY : TC 'finally' TE ;
 ENDCFIF     : TC 'if' TE ;
 ENDCFLOOP   : TC 'loop' TE ;
 ENDCFSCRIPT : TC 'script' TE ;

@@ -50,13 +50,14 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (14)
+### Supported (15)
 
 cfabort
 cfbreak
 cfcatch
 cfelse
 cfelseif
+cffinally
 cfif
 cfinclude
 cfparam
@@ -75,7 +76,7 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (14)
+### Not Supported Yet (13)
 
 cfargument
 cfcase
@@ -83,7 +84,6 @@ cfcomponent
 cfcontinue
 cfdefaultcase
 cfdump
-cffinally
 cfflush
 cffunction
 cflocation

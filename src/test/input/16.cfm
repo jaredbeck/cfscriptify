@@ -7,4 +7,7 @@
   <cfcatch>
     <cfabort>
   </cfcatch>
+  <cffinally>
+    <cfset foo = "bar">
+  </cffinally>
 </cftry>

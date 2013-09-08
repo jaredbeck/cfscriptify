@@ -18,6 +18,17 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	/* <cffinally> */
+	@Override public void enterTagFinally(CFMLParser.TagFinallyContext ctx) {
+		print("finally {\n");
+		entab();
+	}
+
+	@Override public void exitTagFinally(CFMLParser.TagFinallyContext ctx) {
+		detab();
+		print("}\n");
+	}
+
 	/* <cfthrow> */
 	@Override public void enterTagThrow(CFMLParser.TagThrowContext ctx) {
 		String args = ctxSubstr(ctx.CFTHROW().getText(), 9);
