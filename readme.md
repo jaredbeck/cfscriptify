@@ -8,7 +8,7 @@ Usage
 
     bin/build.sh
     bin/test.rb
-    bin/run.sh my.cfm
+    bin/run.sh < input.cfm
 
 See Appendix A for a list of supported CFML tags.
 
@@ -27,10 +27,10 @@ as a starting point.
 1. Paste in `src/sublime/cfscriptify.py`
 1. Update all the `/Users/jared` paths (sorry)
 1. Select some CFML
-1. In sublime's python shell (ctrl-backtick)
+1. Try your new plugin in sublime's python shell (ctrl-backtick)
     * `view.run_command("cfscriptify")`
-1. Or, bind a key, eg.
-    * `{ "keys": ["ctrl+alt+r"], "command": "cfscriptify" }`
+1. If it works, bind a key, eg.
+    * `{ "keys": ["ctrl+alt+super+s"], "command": "cfscriptify" }`
 
 References
 ----------
