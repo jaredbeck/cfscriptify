@@ -12,7 +12,7 @@ class Test
   end
 
   def run
-    system "bin/run.sh #{infile.path} > #{tmp_file_path}"
+    system "bin/run.sh < #{infile.path} > #{tmp_file_path}"
     result = File.read(tmp_file_path)
     expected = outfile.read
     pass = result == expected
