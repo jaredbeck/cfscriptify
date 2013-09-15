@@ -63,8 +63,11 @@ tagFunction
   )*
   TE
   block
+  tagReturn?
   ENDCFFUNCTION
   ;
+
+tagReturn : CFRETURN ;
 
 // Lexer Rules
 // ===========
@@ -83,6 +86,7 @@ CFTRY       : TS 'try' TE ;
 // Tags with expressions
 CFIF        : TS 'if' .*? TE ;
 CFELSEIF    : TS 'elseif' .*? TE ;
+CFRETURN    : TS 'return' .*? TE ;
 CFSET       : TS 'set' .*? TE ;
 
 // Tags with attributes

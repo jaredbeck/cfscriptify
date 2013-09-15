@@ -51,7 +51,7 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (17)
+### Supported (18)
 
 cfabort
 cfbreak
@@ -64,6 +64,7 @@ cfif
 cfinclude
 cfparam
 cfrethrow
+cfreturn
 cfscript
 cfset
 cfsilent
@@ -85,7 +86,7 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (9)
+### Not Supported Yet (8)
 
 cfargument
 cfcomponent
@@ -95,7 +96,6 @@ cfflush
 cflocation
 cflock
 cflog
-cfreturn
 
 ### No Plans to Support (118)
 

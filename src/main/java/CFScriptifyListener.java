@@ -18,6 +18,12 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	/* <cfreturn> */
+	@Override public void enterTagReturn(CFMLParser.TagReturnContext ctx) {
+		String expr = ctxSubstr(ctx.CFRETURN().getText(), 10);
+		print(String.format("return %s;\n", expr));
+	}
+
 	/* <cffunction> */
 	@Override public void enterTagFunction(CFMLParser.TagFunctionContext ctx) {
 		String name = atrVal(firstTextIn(ctx.ATR_NAME()));
