@@ -18,6 +18,20 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	/* <cffunction> */
+	@Override public void enterTagFunction(CFMLParser.TagFunctionContext ctx) {
+		String name = atrVal(firstTextIn(ctx.ATR_NAME()));
+		String rtyp = atrVal(firstTextIn(ctx.ATR_RETURNTYPE()));
+		String access = atrVal(firstTextIn(ctx.ATR_ACCESS()));
+		print(String.format("%s %s function %s() {\n", access, rtyp, name));
+		entab();
+	}
+
+	@Override public void exitTagFunction(CFMLParser.TagFunctionContext ctx) {
+		detab();
+		print("}\n");
+	}
+
 	/* <cfswitch> */
 	@Override public void enterTagSwitch(CFMLParser.TagSwitchContext ctx) {
 		String expression = trimOctothorps(dequote(ctx.STRING_LITERAL().getText()));
@@ -219,6 +233,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	@Override public void exitTagAbort(CFMLParser.TagAbortContext ctx) {
 		print("abort");
+	}
+
+	private String atrVal(String assignment) {
+		return dequote(assignment.split("=")[1]);
 	}
 
 	private int countLeadingWS(String s) {

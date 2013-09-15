@@ -1,7 +1,7 @@
 CFScriptify
 ===========
 
-Converts common CFML tags to cfscript using pure Java.
+Converts [CFML][17] tags to [cfscript][16] using pure Java.  The most common 20% of tags are supported (see below).
 
 Usage
 -----
@@ -35,6 +35,7 @@ as a starting point.
 References
 ----------
 
+* [Adobe ColdFusion 10 documentation][18]
 * [ANTLR 4 Runtime API][1]
     * [ANTLR 4 and AST visitors][2]
     * [ANTLR 4 tree inject/rewrite operator][3]
@@ -70,9 +71,13 @@ cfswitch
 cfthrow
 cftry
 
-### Partially supported (2)
+### Partially supported (3)
 
 [cfcase][14] is supported for single values.  List values are not supported yet.
+
+[cffunction][15] is supported for the following attributes:
+name, access, and returnType.  The `output` attribute is
+ignored, and all other attributes will cause an error.
 
 [cfloop][9] is supported for list, array, and from/to/step.
 Support is planned for loop over query, structure, and condition.
@@ -80,14 +85,13 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (10)
+### Not Supported Yet (9)
 
 cfargument
 cfcomponent
 cfcontinue
 cfdump
 cfflush
-cffunction
 cflocation
 cflock
 cflog
@@ -227,9 +231,13 @@ cfzipparam
 [6]: http://openbd.org/about/
 [7]: http://www.antlr.org/
 [8]: https://github.com/pirategaspard/cftag2cfscript
-[9]: http://adobe.ly/14mmCe5
+[9]: http://adobe.ly/14mmCe5 "cfloop"
 [10]: https://gist.github.com/dtao/2726609
 [11]: http://stackoverflow.com/questions/2502833/python-store-output-of-subprocess-popen-call-in-a-string
 [12]: http://stackoverflow.com/questions/89228/calling-an-external-command-in-python
 [13]: http://docs.sublimetext.info/en/latest/extensibility/plugins.html
-[14]: http://adobe.ly/SGHQR1
+[14]: http://adobe.ly/SGHQR1 "cfcase"
+[15]: http://adobe.ly/1edVKpf "cffunction"
+[16]: http://adobe.ly/15u3Khl "cfscript"
+[17]: http://help.adobe.com/en_US/ColdFusion/9.0/CFMLRef/index.html "Adobe ColdFusion 9 CFML Reference"
+[18]: https://learn.adobe.com/wiki/display/coldfusionen/Home "Adobe ColdFusion 10 documentation"

@@ -7,6 +7,7 @@ block : (blockTag | lineTag)* ;
 
 blockTag
   : cfcomment
+  | tagFunction
   | tagIf
   | tagLoop
   | tagScript
@@ -52,6 +53,19 @@ tagSwitch : CFSWITCH 'expression' '=' STRING_LITERAL TE tagCase* tagDefaultCase?
 tagCase   : CFCASE 'value' '=' STRING_LITERAL TE block ENDCFCASE ;
 tagDefaultCase : CFDEFAULTCASE block ENDCFDEFAULTCASE ;
 
+tagFunction
+  : CFFUNCTION
+  (
+      ATR_NAME
+      | ATR_RETURNTYPE
+      | ATR_OUTPUT
+      | ATR_ACCESS
+  )*
+  TE
+  block
+  ENDCFFUNCTION
+  ;
+
 // Lexer Rules
 // ===========
 
@@ -74,6 +88,7 @@ CFSET       : TS 'set' .*? TE ;
 // Tags with attributes
 CFCASE      : TS 'case' ;
 CFCATCH     : TS 'catch' ;
+CFFUNCTION  : TS 'function' ;
 CFINCLUDE   : TS 'include' ;
 CFLOOP      : TS 'loop' ;
 CFPARAM     : TS 'param' .*? TE ;
@@ -88,6 +103,7 @@ ENDCFCASE   : TC 'case' TE ;
 ENDCFCATCH  : TC 'catch' TE ;
 ENDCFDEFAULTCASE : TC 'defaultcase' TE ;
 ENDCFFINALLY : TC 'finally' TE ;
+ENDCFFUNCTION : TC 'function' TE ;
 ENDCFIF     : TC 'if' TE ;
 ENDCFLOOP   : TC 'loop' TE ;
 ENDCFSCRIPT : TC 'script' TE ;
@@ -95,12 +111,16 @@ ENDCFSWITCH : TC 'switch' TE ;
 ENDCFTRY    : TC 'try' TE ;
 
 // Attributes
-ATR_ARRAY   : 'array' '=' STRING_LITERAL ;
-ATR_FROM    : 'from'  '=' STRING_LITERAL ;
-ATR_INDEX   : 'index' '=' STRING_LITERAL ;
-ATR_LIST    : 'list'  '=' STRING_LITERAL ;
-ATR_STEP    : 'step'  '=' STRING_LITERAL ;
-ATR_TO      : 'to'    '=' STRING_LITERAL ;
+ATR_ACCESS      : 'access'      '=' STRING_LITERAL ;
+ATR_ARRAY       : 'array'       '=' STRING_LITERAL ;
+ATR_FROM        : 'from'        '=' STRING_LITERAL ;
+ATR_INDEX       : 'index'       '=' STRING_LITERAL ;
+ATR_LIST        : 'list'        '=' STRING_LITERAL ;
+ATR_NAME        : 'name'        '=' STRING_LITERAL ;
+ATR_OUTPUT      : 'output'      '=' STRING_LITERAL ;
+ATR_RETURNTYPE  : 'returntype'  '=' STRING_LITERAL ;
+ATR_STEP        : 'step'        '=' STRING_LITERAL ;
+ATR_TO          : 'to'          '=' STRING_LITERAL ;
 
 TE : '/'? '>' ; // Tag End
 
