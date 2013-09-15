@@ -6,7 +6,7 @@ Converts [CFML][17] tags to [cfscript][16] using pure Java.  The most common 20%
 Usage
 -----
 
-    bin/build.sh
+    mvn package
     bin/test.rb
     bin/run.sh < input.cfm
 
