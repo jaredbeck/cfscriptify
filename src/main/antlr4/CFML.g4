@@ -42,7 +42,6 @@ tagLoopFrom : CFLOOP (ATR_FROM | ATR_TO | ATR_INDEX | ATR_STEP)* TE block ENDCFL
 tagLoopList : CFLOOP (ATR_LIST | ATR_INDEX)* TE block ENDCFLOOP ;
 tagParam : CFPARAM ;
 tagScript : CFSCRIPT ;
-tagSet : CFSET ;
 tagThrow : CFTHROW ;
 tagAbort : CFABORT ;
 tagTry : CFTRY block tagCatch* tagFinally? ENDCFTRY ;
@@ -69,10 +68,44 @@ tagFunction
 
 tagReturn : CFRETURN ;
 
+// Experimental
+// ------------
+
+tagSet : CFSET ( assignment | expression ) TE ;
+assignment : reference '=' expression ;
+expression : binaryOp | unaryOp | operand ;
+binaryOp : operand BINARY_OPERATOR expression ;
+unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR operand ;
+operand : literal | reference | funcInvoc ;
+literal : STRING_LITERAL | INT_LITERAL | DECIMAL_LITERAL ;
+
+funcInvoc : dottedRef '(' positionalArguments? ')' ;
+positionalArguments : expression ( ',' expression )* ;
+
+reference : dottedRef | arrayIndex /* or a struct index */ ;
+dottedRef : VARIABLE_NAME ( '.' VARIABLE_NAME )* ;
+arrayIndex : dottedRef '[' expression ']' ;
+
+/*
+nonrecursive rules:
+  dottedRef
+  literal
+
+recursive rules to listen for:
+  assignment
+  binaryOp
+  unaryOp
+  funcInvoc
+  positionalArguments
+*/
+
 // Lexer Rules
 // ===========
 
 CFCOMMENT : '<!---' .*? '--->' ;
+
+// Experimental
+CFSET       : TS 'set' ;
 
 // Tags with no attributes or expressions
 CFABORT     : TS 'abort' TE ;
@@ -87,7 +120,6 @@ CFTRY       : TS 'try' TE ;
 CFIF        : TS 'if' .*? TE ;
 CFELSEIF    : TS 'elseif' .*? TE ;
 CFRETURN    : TS 'return' .*? TE ;
-CFSET       : TS 'set' .*? TE ;
 
 // Tags with attributes
 CFCASE      : TS 'case' ;
@@ -128,9 +160,59 @@ ATR_TO          : 'to'          '=' STRING_LITERAL ;
 
 TE : '/'? '>' ; // Tag End
 
+INT_LITERAL : '-'? DIGIT+ ;
+DECIMAL_LITERAL : '-'? DIGIT+ '.' DIGIT+ ;
 STRING_LITERAL
   : '"' DoubleStringCharacter* '"'
   | '\'' SingleStringCharacter* '\''
+  ;
+
+/*
+A variable name must begin with a letter, underscore, or Unicode
+currency symbol. The initial character can by followed by any number
+of letters, numbers, underscore characters, and Unicode currency
+symbols. A variable name cannot contain spaces.
+http://adobe.ly/1btjPoA
+*/
+VARIABLE_NAME : [a-zA-Z_$] [a-zA-Z_$0-9]* ;
+
+/* omg so many operators: http://adobe.ly/cRnrRL */
+UNARY_POSTFIX_OPERATOR : '++' | '--' ;
+UNARY_PREFIX_OPERATOR : 'NOT' ;
+BINARY_OPERATOR
+  : '+'
+  | '-'
+  | '*'
+  | '/'
+  | '%'
+  | '^'
+  | '\\'
+  | 'MOD'
+  | '&&'
+  | 'AND'
+  | '||'
+  | 'OR'
+  | 'XOR'
+  | 'EQV'
+  | 'IMP'
+  | 'IS'
+  | 'EQUAL'
+  | 'EQ'
+  | 'IS NOT'
+  | 'NOT EQUAL'
+  | 'NEQ'
+  | 'CONTAINS'
+  | 'DOES NOT CONTAIN'
+  | 'GREATER THAN'
+  | 'GT'
+  | 'LESS THAN'
+  | 'LT'
+  | 'GREATER THAN OR EQUAL TO'
+  | 'GTE'
+  | 'GE'
+  | 'LESS THAN OR EQUAL TO'
+  | 'LTE'
+  | 'LE'
   ;
 
 /*
@@ -147,6 +229,8 @@ CFSILENT : (TS | TC) 'silent' TE -> skip ;
 
 // Lexer Fragments
 // ===============
+
+fragment DIGIT : [0-9] ;
 
 fragment DoubleStringCharacter
   : ~('"')

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -14,7 +16,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	private int depth; // for indentation
 
-	public void CFScriptifyListener() {
+	public CFScriptifyListener() {
 		depth = 0;
 	}
 
@@ -224,9 +226,17 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		entab();
 	}
 
-	/* <cfset> */
 	@Override public void enterTagSet(CFMLParser.TagSetContext ctx) {
-		print(ctxSubstr(ctx.getText(), 7));
+		if (ctx.expression() != null) {
+			print(expressionToString(ctx.expression()));
+		}
+		/* else it's an assignment, see enterAssignment */
+	}
+
+	@Override public void enterAssignment(CFMLParser.AssignmentContext ctx) {
+		String lhs = ctx.reference().getText();
+		String rhs = expressionToString(ctx.expression());
+		print(String.format("%s = %s", lhs, rhs));
 	}
 
 	@Override public void enterCfcomment(CFMLParser.CfcommentContext ctx) {
@@ -239,6 +249,71 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	@Override public void exitTagAbort(CFMLParser.TagAbortContext ctx) {
 		print("abort");
+	}
+
+	private String expressionToString(CFMLParser.ExpressionContext ctx) {
+		String str = null;
+		if (ctx.binaryOp() != null) {
+			str = binaryOpToString(ctx.binaryOp());
+		}
+		if (ctx.operand() != null) {
+			str = operandToString(ctx.operand());
+		}
+		return str;
+	}
+
+	private String binaryOpToString(CFMLParser.BinaryOpContext ctx) {
+		String lhs = operandToString(ctx.operand());
+		String rhs = expressionToString(ctx.expression());
+		String op = ctx.BINARY_OPERATOR().getText();
+		return String.format("%s %s %s", lhs, op, rhs);
+	}
+
+	private String operandToString(CFMLParser.OperandContext ctx) {
+		String str = null;
+		if (ctx.literal() != null) {
+			str = ctx.literal().getText();
+		}
+		else if (ctx.reference() != null) {
+			str = referenceToString(ctx.reference());
+		}
+		else if (ctx.funcInvoc() != null) {
+			str = funcInvocToString(ctx.funcInvoc());
+		}
+		return str;
+	}
+
+	private String referenceToString(CFMLParser.ReferenceContext ctx) {
+		String str = null;
+		if (ctx.dottedRef() != null) {
+			str = ctx.dottedRef().getText();
+		}
+		else if (ctx.arrayIndex() != null) {
+			str = arrayIndexToString(ctx.arrayIndex());
+		}
+		return str;
+	}
+
+	private String arrayIndexToString(CFMLParser.ArrayIndexContext ctx) {
+		String ref = ctx.dottedRef().getText();
+		String ix = expressionToString(ctx.expression());
+		return String.format("%s[%s]", ref, ix);
+	}
+
+	private String funcInvocToString(CFMLParser.FuncInvocContext ctx) {
+		String ref = ctx.dottedRef().getText();
+		String args = "";
+		if (ctx.positionalArguments() != null) {
+			args = positionalArgumentsToString(ctx.positionalArguments());
+		}
+		return String.format("%s(%s)", ref, args);
+	}
+
+	private String positionalArgumentsToString(CFMLParser.PositionalArgumentsContext ctx) {
+		Iterator<CFMLParser.ExpressionContext> ei = ctx.expression().iterator();
+		ArrayList strs = new ArrayList();
+		while(ei.hasNext()) { strs.add(expressionToString(ei.next())); }
+		return StringUtils.join(strs.toArray(), ", ");
 	}
 
 	private String atrVal(String assignment) {
@@ -310,8 +385,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	}
 
 	private void print(String s) {
-		String indents = StringUtils.repeat("\t", depth);
-		System.out.print(indents + s);
+		System.out.print(StringUtils.repeat("\t", depth) + s);
 	}
 
 	private void printWarning(String s) {
