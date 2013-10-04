@@ -57,7 +57,13 @@ public class CFScript {
   }
 
   private static String funcInvocToString(CFMLParser.FuncInvocContext ctx) {
-    String ref = ctx.dottedRef().getText();
+    String ref = null;
+    if (ctx.dottedRef() != null) {
+      ref = ctx.dottedRef().getText();
+    }
+    else {
+      ref = ctx.BUILTIN_FUNC().getText();
+    }
     String args = "";
     if (ctx.positionalArguments() != null) {
       args = positionalArgumentsToString(ctx.positionalArguments());
