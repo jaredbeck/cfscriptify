@@ -197,7 +197,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfif> */
 	@Override public void enterTagIf(CFMLParser.TagIfContext ctx) {
-		String expr = ctxSubstr(ctx.CFIF().getText(), 6);
+		String expr = CFScript.expressionToString(ctx.expression());
 		print("if (" + expr + ") {\n");
 		entab();
 	}
@@ -210,7 +210,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	/* <cfelseif> */
 	@Override public void enterTagElseIf(CFMLParser.TagElseIfContext ctx) {
 		detab();
-		String expr = ctxSubstr(ctx.CFELSEIF().getText(), 10);
+		String expr = CFScript.expressionToString(ctx.expression());
 		print("}\n");
 		print("else if (" + expr + ") {\n");
 		entab();

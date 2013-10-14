@@ -12,6 +12,13 @@ public class CFScript {
     if (ctx.operand() != null) {
       str = operandToString(ctx.operand());
     }
+    if (ctx.parenthesis() != null) {
+      str = parenthesisToString(ctx.parenthesis());
+    }
+    if (ctx.unaryOp() != null) {
+      str = unaryOpToString(ctx.unaryOp());
+    }
+    if (str == null) { die("Unexpected input in expression"); }
     return str;
   }
 
@@ -19,10 +26,21 @@ public class CFScript {
   // ---------------
 
   private static String binaryOpToString(CFMLParser.BinaryOpContext ctx) {
-    String lhs = operandToString(ctx.operand());
+    String lhs = null;
+    if (ctx.operand() != null) {
+      lhs = operandToString(ctx.operand());
+    }
+    else {
+      lhs = parenthesisToString(ctx.parenthesis());
+    }
     String rhs = expressionToString(ctx.expression());
     String op = ctx.BINARY_OPERATOR().getText();
     return String.format("%s %s %s", lhs, op, rhs);
+  }
+
+  private static void die(String msg) {
+    System.err.println("ERROR: " + msg);
+    System.exit(1);
   }
 
   private static String operandToString(CFMLParser.OperandContext ctx) {
@@ -71,10 +89,27 @@ public class CFScript {
     return String.format("%s(%s)", ref, args);
   }
 
+  private static String parenthesisToString(CFMLParser.ParenthesisContext ctx) {
+    return '(' + expressionToString(ctx.expression()) + ')';
+  }
+
   private static String positionalArgumentsToString(CFMLParser.PositionalArgumentsContext ctx) {
     Iterator<CFMLParser.ExpressionContext> ei = ctx.expression().iterator();
     ArrayList strs = new ArrayList();
     while(ei.hasNext()) { strs.add(expressionToString(ei.next())); }
     return StringUtils.join(strs.toArray(), ", ");
+  }
+
+  private static String unaryOpToString(CFMLParser.UnaryOpContext ctx) {
+    String str = null;
+    if (ctx.UNARY_POSTFIX_OPERATOR() != null) {
+      die("Unary postfix operators not yet supported");
+    }
+    else {
+      String op = ctx.UNARY_PREFIX_OPERATOR().getText();
+      String expr = expressionToString(ctx.expression());
+      str = String.format("%s %s", op, expr);
+    }
+    return str;
   }
 }

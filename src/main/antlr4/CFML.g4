@@ -3,6 +3,7 @@ grammar CFML;
 // Parser Rules
 // ============
 
+// Starting rule.  `block` describes an entire CFML file.
 block : (blockTag | lineTag)* ;
 
 blockTag
@@ -30,10 +31,10 @@ about it, but it must be implemented as a lexer rule, so that it can
 have higher precedence than the `WS` rule. */
 cfcomment : CFCOMMENT ;
 
+// Rules that do not yet support "deep" parsing
+// --------------------------------------------
+
 tagBreak : CFBREAK ;
-tagIf : CFIF block tagElseIf* tagElse? ENDCFIF ;
-tagElseIf : CFELSEIF block ;
-tagElse : CFELSE block ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE 'template' '=' STRING_LITERAL TE ;
 tagLoop : (tagLoopList | tagLoopArray | tagLoopFrom) ;
@@ -68,14 +69,19 @@ tagFunction
 
 tagReturn : CFRETURN ;
 
-// Experimental
-// ------------
+// Rules that *do* support "deep" parsing
+// --------------------------------------------
 
+tagIf : CFIF expression TE block tagElseIf* tagElse? ENDCFIF ;
+tagElseIf : CFELSEIF expression TE block ;
+tagElse : CFELSE block ;
 tagSet : CFSET ( assignment | expression ) TE ;
+
 assignment : reference '=' expression ;
-expression : binaryOp | unaryOp | operand ;
-binaryOp : operand BINARY_OPERATOR expression ;
-unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR operand ;
+expression : binaryOp | unaryOp | operand | parenthesis ;
+parenthesis : '(' expression ')' ;
+binaryOp : ( operand | parenthesis ) BINARY_OPERATOR expression ;
+unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR expression ;
 operand : literal | reference | funcInvoc ;
 literal : STRING_LITERAL | INT_LITERAL | DECIMAL_LITERAL ;
 
@@ -86,26 +92,16 @@ reference : dottedRef | arrayIndex /* or a struct index */ ;
 dottedRef : VARIABLE_NAME ( '.' VARIABLE_NAME )* ;
 arrayIndex : dottedRef '[' expression ']' ;
 
-/*
-nonrecursive rules:
-  dottedRef
-  literal
-
-recursive rules to listen for:
-  assignment
-  binaryOp
-  unaryOp
-  funcInvoc
-  positionalArguments
-*/
-
 // Lexer Rules
 // ===========
 
 CFCOMMENT : '<!---' .*? '--->' ;
 
-// Experimental
+// Tags with expressions
 CFSET       : TS 'set' ;
+CFIF        : TS 'if' ;
+CFELSEIF    : TS 'elseif' ;
+CFRETURN    : TS 'return' .*? TE ;
 
 // Tags with no attributes or expressions
 CFABORT     : TS 'abort' TE ;
@@ -115,11 +111,6 @@ CFELSE      : TS 'else' TE ;
 CFFINALLY   : TS 'finally' TE ;
 CFRETHROW   : TS 'rethrow' TE ;
 CFTRY       : TS 'try' TE ;
-
-// Tags with expressions
-CFIF        : TS 'if' .*? TE ;
-CFELSEIF    : TS 'elseif' .*? TE ;
-CFRETURN    : TS 'return' .*? TE ;
 
 // Tags with attributes
 CFCASE      : TS 'case' ;
@@ -131,7 +122,7 @@ CFPARAM     : TS 'param' .*? TE ;
 CFSWITCH    : TS 'switch' ;
 CFTHROW     : TS 'throw' .*? TE ;
 
-// Tags with unparsed blocks
+// Tags with blocks that should not be parsed
 CFSCRIPT    : TS 'script' TE .*? ENDCFSCRIPT ;
 
 // Closing tags
@@ -167,21 +158,9 @@ STRING_LITERAL
   | '\'' SingleStringCharacter* '\''
   ;
 
-/*
-A variable name must begin with a letter, underscore, or Unicode
-currency symbol. The initial character can by followed by any number
-of letters, numbers, underscore characters, and Unicode currency
-symbols. A variable name cannot contain spaces.
-http://adobe.ly/1btjPoA
-*/
-/* Known issue: It is legal for a variable name to begin with a capital
-letter. However, this lexer rule requires a lowercase first letter to
-avoid an operator like EQ from being interpreted as a variable name. */
-VARIABLE_NAME : [a-z_$] [a-zA-Z_$0-9]* ;
-
 /* omg so many operators: http://adobe.ly/cRnrRL */
 UNARY_POSTFIX_OPERATOR : '++' | '--' ;
-UNARY_PREFIX_OPERATOR : 'NOT' ;
+UNARY_PREFIX_OPERATOR : 'NOT' | 'not' ;
 BINARY_OPERATOR
   : '+'
   | '-'
@@ -216,6 +195,30 @@ BINARY_OPERATOR
   | 'LESS THAN OR EQUAL TO'
   | 'LTE'
   | 'LE'
+  | 'mod'
+  | 'and'
+  | 'or'
+  | 'xor'
+  | 'eqv'
+  | 'imp'
+  | 'is'
+  | 'equal'
+  | 'eq'
+  | 'is not'
+  | 'not equal'
+  | 'neq'
+  | 'contains'
+  | 'does not contain'
+  | 'greater than'
+  | 'gt'
+  | 'less than'
+  | 'lt'
+  | 'greater than or equal to'
+  | 'gte'
+  | 'ge'
+  | 'less than or equal to'
+  | 'lte'
+  | 'le'
   ;
 
 /* Built-in function names are all reserved words, all 470 of them. */
@@ -691,6 +694,20 @@ BUILTIN_FUNC
   | 'Year'
   | 'YesNoFormat'
   ;
+
+/*
+A variable name must begin with a letter, underscore, or Unicode
+currency symbol. The initial character can by followed by any number
+of letters, numbers, underscore characters, and Unicode currency
+symbols. A variable name cannot contain spaces. (http://adobe.ly/1btjPoA)
+
+Reserved words ".. must not [be used] for .. variables, user-defined
+function names, or custom tag names" (http://adobe.ly/1cMqKML)
+
+This rule must have lower precendence than rules like BINARY_OPERATOR,
+to prevent incorrectly lexing an operator as a VARIABLE_NAME.
+*/
+VARIABLE_NAME : [a-zA-Z_$] [a-zA-Z_$0-9]* ;
 
 /*
 Lexer Rules: Skips

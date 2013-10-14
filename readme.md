@@ -1,8 +1,7 @@
 CFScriptify
 ===========
 
-Converts [CFML][17] tags to [cfscript][16] using Java.  The most
-common 20% of tags are supported (see below).
+Converts [CFML][17] tags to [cfscript][16] using Java.
 
 Usage
 -----
@@ -11,7 +10,10 @@ Usage
     bin/test.rb
     bin/run.sh < input.cfm
 
-See Appendix A for a list of supported CFML tags.
+### Limitations
+
+- Tags: Only the most common 20% of tags are supported (See Appendix A).
+- Operators: Mixed-case, eg. CoNtAiNs, is legal in CFML, but not supported here.
 
 ### Whitespace Output
 
