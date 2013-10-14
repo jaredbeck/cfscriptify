@@ -219,8 +219,8 @@ BINARY_OPERATOR
   ;
 
 /* Built-in function names are all reserved words, all 470 of them. */
-BUILTIN_FUNC :
-  | 'Abs'
+BUILTIN_FUNC
+  : 'Abs'
   | 'ACos'
   | 'AddSOAPRequestHeader'
   | 'AddSOAPResponseHeader'
