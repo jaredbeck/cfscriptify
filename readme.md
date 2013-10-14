@@ -1,7 +1,8 @@
 CFScriptify
 ===========
 
-Converts [CFML][17] tags to [cfscript][16] using pure Java.  The most common 20% of tags are supported (see below).
+Converts [CFML][17] tags to [cfscript][16] using Java.  The most
+common 20% of tags are supported (see below).
 
 Usage
 -----
