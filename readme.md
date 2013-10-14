@@ -47,6 +47,9 @@ References
     * [randomize.py][10] (example of replacing the selected text)
     * [Python - store output of subprocess.Popen call in a string][11]
     * [Calling an external command in Python][12]
+* Left recursion
+    * [Removing left recursion][20]
+    * [ANTLR - left recursion removal assistance][19]
 
 Appendix A: Supported CFML Tags
 -------------------------------
@@ -241,3 +244,5 @@ cfzipparam
 [16]: http://adobe.ly/15u3Khl "cfscript"
 [17]: http://help.adobe.com/en_US/ColdFusion/9.0/CFMLRef/index.html "Adobe ColdFusion 9 CFML Reference"
 [18]: https://learn.adobe.com/wiki/display/coldfusionen/Home "Adobe ColdFusion 10 documentation"
+[19]: http://stackoverflow.com/questions/11388099/antlr-left-recursion-removal-assistance
+[20]: http://en.wikipedia.org/wiki/Left_recursion#Removing_left_recursion
