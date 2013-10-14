@@ -39,6 +39,7 @@ References
 
 * [Adobe ColdFusion 10 documentation][18]
 * [ANTLR 4 Runtime API][1]
+    * [ErrorType (ANTLR 4 Tool 4.1 API)][21] (describes some runtime errors)
     * [ANTLR 4 and AST visitors][2]
     * [ANTLR 4 tree inject/rewrite operator][3]
 * [openbd.org][4]
@@ -248,3 +249,4 @@ cfzipparam
 [18]: https://learn.adobe.com/wiki/display/coldfusionen/Home "Adobe ColdFusion 10 documentation"
 [19]: http://stackoverflow.com/questions/11388099/antlr-left-recursion-removal-assistance
 [20]: http://en.wikipedia.org/wiki/Left_recursion#Removing_left_recursion
+[21]: http://www.antlr.org/api/Java/org/antlr/v4/tool/ErrorType.html
