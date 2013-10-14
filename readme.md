@@ -13,11 +13,10 @@ Usage
 
 See Appendix A for a list of supported CFML tags.
 
-### Whitespace
+### Whitespace Output
 
-Output line endings are LF, but CR and CRLF are acceptable as
-input.  Output is indented with tabs, but I'd welcome a pull
-request for spaces.
+- Line Endings: LF (but CR and CRLF are acceptable as input)
+- Indentation: Tabs, but I'd welcome a pull request for spaces
 
 ### Sublime Text 2 Plugin
 
