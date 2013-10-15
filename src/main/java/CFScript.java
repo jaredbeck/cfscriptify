@@ -4,6 +4,12 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CFScript {
 
+  public static String assignmentToString(CFMLParser.AssignmentContext ctx) {
+    String ref = referenceToString(ctx.reference());
+    String expr = expressionToString(ctx.expression());
+    return String.format("%s = %s", ref, expr);
+  }
+
   public static String expressionToString(CFMLParser.ExpressionContext ctx) {
     String str = null;
     if (ctx.binaryOp() != null) {
@@ -43,10 +49,30 @@ public class CFScript {
     System.exit(1);
   }
 
+  private static String literalToString(CFMLParser.LiteralContext ctx) {
+    String str = null;
+    if (ctx.STRING_LITERAL() != null
+      || ctx.INT_LITERAL() != null
+      || ctx.DECIMAL_LITERAL() != null)
+    {
+      str = ctx.getText();
+    }
+    else if (ctx.arrayLiteral() != null) {
+      str = '[' + positionalArgumentsToString(ctx.arrayLiteral().positionalArguments()) + ']';
+    }
+    else if (ctx.structLiteral() != null) {
+      str = '{' + namedArgumentsToString(ctx.structLiteral().namedArguments()) + '}';
+    }
+    else {
+      die("Unexpected input in literal");
+    }
+    return str;
+  }
+
   private static String operandToString(CFMLParser.OperandContext ctx) {
     String str = null;
     if (ctx.literal() != null) {
-      str = ctx.literal().getText();
+      str = literalToString(ctx.literal());
     }
     else if (ctx.reference() != null) {
       str = referenceToString(ctx.reference());
@@ -87,6 +113,13 @@ public class CFScript {
       args = positionalArgumentsToString(ctx.positionalArguments());
     }
     return String.format("%s(%s)", ref, args);
+  }
+
+  private static String namedArgumentsToString(CFMLParser.NamedArgumentsContext ctx) {
+    Iterator<CFMLParser.AssignmentContext> ai = ctx.assignment().iterator();
+    ArrayList strs = new ArrayList();
+    while(ai.hasNext()) { strs.add(assignmentToString(ai.next())); }
+    return StringUtils.join(strs.toArray(), ", ");
   }
 
   private static String parenthesisToString(CFMLParser.ParenthesisContext ctx) {

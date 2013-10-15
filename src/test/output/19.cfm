@@ -1,3 +1,3 @@
 public void function foo() {
-	return [{herp = "derp"}];
+	return [{herp = "de>rp"}];
 }

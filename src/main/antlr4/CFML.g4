@@ -67,7 +67,6 @@ tagFunction
   ENDCFFUNCTION
   ;
 
-tagReturn : CFRETURN ;
 
 // Rules that *do* support "deep" parsing
 // --------------------------------------------
@@ -75,6 +74,7 @@ tagReturn : CFRETURN ;
 tagIf : CFIF expression TE block tagElseIf* tagElse? ENDCFIF ;
 tagElseIf : CFELSEIF expression TE block ;
 tagElse : CFELSE block ;
+tagReturn : CFRETURN expression TE ;
 tagSet : CFSET ( assignment | expression ) TE ;
 
 assignment : reference '=' expression ;
@@ -83,10 +83,24 @@ parenthesis : '(' expression ')' ;
 binaryOp : ( operand | parenthesis ) BINARY_OPERATOR expression ;
 unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR expression ;
 operand : literal | reference | funcInvoc ;
-literal : STRING_LITERAL | INT_LITERAL | DECIMAL_LITERAL ;
 
-funcInvoc : ( dottedRef | BUILTIN_FUNC ) '(' positionalArguments? ')' ;
+literal : STRING_LITERAL
+  | INT_LITERAL
+  | DECIMAL_LITERAL
+  | arrayLiteral
+  | structLiteral
+  ;
+arrayLiteral : '[' positionalArguments ']' ;
+structLiteral : '{' namedArguments '}' ;
+
+funcInvoc :
+  ( dottedRef | BUILTIN_FUNC )
+  '('
+  ( positionalArguments | namedArguments )?
+  ')'
+  ;
 positionalArguments : expression ( ',' expression )* ;
+namedArguments : assignment ( ',' assignment )* ;
 
 reference : dottedRef | arrayIndex /* or a struct index */ ;
 dottedRef : VARIABLE_NAME ( '.' VARIABLE_NAME )* ;
@@ -101,7 +115,7 @@ CFCOMMENT : '<!---' .*? '--->' ;
 CFSET       : TS 'set' ;
 CFIF        : TS 'if' ;
 CFELSEIF    : TS 'elseif' ;
-CFRETURN    : TS 'return' .*? TE ;
+CFRETURN    : TS 'return' ;
 
 // Tags with no attributes or expressions
 CFABORT     : TS 'abort' TE ;

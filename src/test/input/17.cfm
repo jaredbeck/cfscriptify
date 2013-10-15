@@ -1,4 +1,4 @@
-<cfswitch expression="#foo#">
+<cfswitch expression="#foo EQ '>'#">
 	<cfcase value="bar">
 		<!--- A --->
 	</cfcase>

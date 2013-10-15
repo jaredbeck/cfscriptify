@@ -1,4 +1,4 @@
-switch (foo) {
+switch (foo EQ '>') {
 	case "bar":
 		/* A */
 		break;

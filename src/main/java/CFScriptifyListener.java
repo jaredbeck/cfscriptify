@@ -20,7 +20,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfreturn> */
 	@Override public void enterTagReturn(CFMLParser.TagReturnContext ctx) {
-		String expr = ctxSubstr(ctx.CFRETURN().getText(), 10);
+		String expr = CFScript.expressionToString(ctx.expression());
 		print(String.format("return %s;\n", expr));
 	}
 
@@ -228,13 +228,9 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		if (ctx.expression() != null) {
 			print(CFScript.expressionToString(ctx.expression()));
 		}
-		/* else it's an assignment, see enterAssignment */
-	}
-
-	@Override public void enterAssignment(CFMLParser.AssignmentContext ctx) {
-		String lhs = ctx.reference().getText();
-		String rhs = CFScript.expressionToString(ctx.expression());
-		print(String.format("%s = %s", lhs, rhs));
+		else {
+			print(CFScript.assignmentToString(ctx.assignment()));
+		}
 	}
 
 	@Override public void enterCfcomment(CFMLParser.CfcommentContext ctx) {
