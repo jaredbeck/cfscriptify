@@ -6,6 +6,9 @@ Converts [CFML][17] tags to [cfscript][16] using Java.
 Usage
 -----
 
+Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8)
+
+    mvn --version
     mvn -q package
     bin/test.rb
     bin/run.sh < input.cfm
@@ -25,8 +28,7 @@ Usage
 Nothing polished yet, but you can use `docs/sublime/cfscriptify.py`
 as a starting point.
 
-1. `mvn -q package`
-    * download dependencies into `~/.m2/repository`
+1. Make sure the tests (described above) pass
 1. Tools -> New Plugin ..
 1. Paste in `src/main/sublime/cfscriptify.py`
 1. Update all the `/Users/jared` paths (sorry)
@@ -257,3 +259,4 @@ cfzipparam
 [21]: http://www.antlr.org/api/Java/org/antlr/v4/tool/ErrorType.html
 [22]: http://adobe.ly/9naZLp "Defining components and functions in CFScript"
 [23]: http://adobe.ly/16LAPWv "cfargument"
+[24]: http://maven.apache.org/
