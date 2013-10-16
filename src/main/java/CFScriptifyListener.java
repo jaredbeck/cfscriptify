@@ -26,10 +26,11 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cffunction> */
 	@Override public void enterTagFunction(CFMLParser.TagFunctionContext ctx) {
-		String name = atrVal(firstTextIn(ctx.ATR_NAME()));
-		String rtyp = atrVal(firstTextIn(ctx.ATR_RETURNTYPE()));
-		String access = atrVal(firstTextIn(ctx.ATR_ACCESS()));
-		print(String.format("%s %s function %s() {\n", access, rtyp, name));
+		String name 	= CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_NAME()));
+		String rtyp 	= CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_RETURNTYPE()));
+		String access = CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_ACCESS()));
+		String args = CFScript.argumentsToString(ctx.tagArgument());
+		print(String.format("%s %s function %s(%s) {\n", access, rtyp, name, args));
 		entab();
 	}
 
@@ -40,7 +41,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfswitch> */
 	@Override public void enterTagSwitch(CFMLParser.TagSwitchContext ctx) {
-		String expression = trimOctothorps(dequote(ctx.STRING_LITERAL().getText()));
+		String expression = trimOctothorps(CFScript.dequote(ctx.STRING_LITERAL().getText()));
 		print("switch (" + expression + ") {\n");
 		entab();
 	}
@@ -102,8 +103,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfcatch type="foo"> */
 	@Override public void enterTagCatch(CFMLParser.TagCatchContext ctx) {
-		TerminalNode atrType = ctx.STRING_LITERAL();
-		String type = (atrType == null) ? "any" : dequote(atrType.getText());
+		TerminalNode atrType = ctx.ATR_TYPE();
+		String type = (atrType == null) ? "any" : CFScript.atrVal(atrType.getText());
 		print("catch(" + type + " cfcatch) {\n");
 		entab();
 	}
@@ -148,10 +149,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfloop from="" to="" index="" step=""> */
 	@Override public void enterTagLoopFrom(CFMLParser.TagLoopFromContext ctx) {
-		String from = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_FROM()), 6));
-		String to = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_TO()), 4));
-		String index = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_INDEX()), 7));
-		String step = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_STEP()), 6));
+		String from 	= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_FROM()), 6));
+		String to 		= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_TO()), 4));
+		String index 	= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7));
+		String step 	= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_STEP()), 6));
 		if (step.length() == 0) { step = "1"; }
 		String op = loopComparison(from, to, step);
 
@@ -171,8 +172,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfloop array="" index=""> */
 	@Override public void enterTagLoopArray(CFMLParser.TagLoopArrayContext ctx) {
-		String array = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_ARRAY()), 7));
-		String index = ctxSubstr(firstTextIn(ctx.ATR_INDEX()), 7);
+		String array = trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_ARRAY()), 7));
+		String index = ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
 		print ("for (" + index + " in " + array + ") {\n");
 		entab();
 	}
@@ -184,8 +185,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfloop list="" index=""> */
 	@Override public void enterTagLoopList(CFMLParser.TagLoopListContext ctx) {
-		String list = trimOctothorps(ctxSubstr(firstTextIn(ctx.ATR_LIST()), 6));
-		String index = ctxSubstr(firstTextIn(ctx.ATR_INDEX()), 7);
+		String list = trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_LIST()), 6));
+		String index = ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
 		print("for (" + index + " in ListToArray(" + list + ")) {\n");
 		entab();
 	}
@@ -245,10 +246,6 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		print("abort");
 	}
 
-	private String atrVal(String assignment) {
-		return dequote(assignment.split("=")[1]);
-	}
-
 	private int countLeadingWS(String s) {
 		Pattern pattern = Pattern.compile("^\\s*");
 		Matcher matcher = pattern.matcher(s);
@@ -267,12 +264,6 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	private void detab() {
 		if (depth > 0) { depth --; }
-	}
-
-	private String dequote(String str) {
-		String q = str.substring(0, 1);
-		String esc = StringUtils.repeat(q, 2);
-		return StringUtils.strip(str, q).replace(esc, q);
 	}
 
 	private void entab() {
@@ -298,15 +289,6 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	private int firstLineOffset(String[] lines) {
 		return lines.length == 0 ? 0 : countLeadingWS(lines[0]);
-	}
-
-	private String firstTextIn(List<TerminalNode> l) {
-		if (l.size() == 0) {
-			return "";
-		}
-		else {
-			return l.get(0).getText();
-		}
 	}
 
 	private String getCFCommentInnerText(String c) {

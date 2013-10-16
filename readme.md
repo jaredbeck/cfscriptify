@@ -78,7 +78,11 @@ cfswitch
 cfthrow
 cftry
 
-### Partially supported (3)
+### Partially supported (4)
+
+[cfargument][23] is fully supported except that `hint` and
+`displayName` attributes are discarded, because the syntax for those
+attributes is [awkward][22] in cfscript.  I'd welcome a pull request.
 
 [cfcase][14] is supported for single values.  List values are not supported yet.
 
@@ -92,9 +96,8 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (8)
+### Not Supported Yet (7)
 
-cfargument
 cfcomponent
 cfcontinue
 cfdump
@@ -250,3 +253,5 @@ cfzipparam
 [19]: http://stackoverflow.com/questions/11388099/antlr-left-recursion-removal-assistance
 [20]: http://en.wikipedia.org/wiki/Left_recursion#Removing_left_recursion
 [21]: http://www.antlr.org/api/Java/org/antlr/v4/tool/ErrorType.html
+[22]: http://adobe.ly/9naZLp "Defining components and functions in CFScript"
+[23]: http://adobe.ly/16LAPWv "cfargument"

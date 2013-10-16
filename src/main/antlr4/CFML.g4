@@ -46,7 +46,7 @@ tagScript : CFSCRIPT ;
 tagThrow : CFTHROW ;
 tagAbort : CFABORT ;
 tagTry : CFTRY block tagCatch* tagFinally? ENDCFTRY ;
-tagCatch : CFCATCH ('type' '=' STRING_LITERAL)? TE block ENDCFCATCH ;
+tagCatch : CFCATCH ATR_TYPE? TE block ENDCFCATCH ;
 tagRethrow : CFRETHROW ;
 
 tagSwitch : CFSWITCH 'expression' '=' STRING_LITERAL TE tagCase* tagDefaultCase? ENDCFSWITCH ;
@@ -62,11 +62,24 @@ tagFunction
       | ATR_ACCESS
   )*
   TE
+  tagArgument*
   block
   tagReturn?
   ENDCFFUNCTION
   ;
 
+tagArgument
+  : CFARGUMENT
+  (
+    ATR_NAME
+    | ATR_DEFAULT
+    | ATR_DISPLAYNAME
+    | ATR_HINT
+    | ATR_REQUIRED
+    | ATR_TYPE
+  )*
+  TE
+  ;
 
 // Rules that *do* support "deep" parsing
 // --------------------------------------------
@@ -127,6 +140,7 @@ CFRETHROW   : TS 'rethrow' TE ;
 CFTRY       : TS 'try' TE ;
 
 // Tags with attributes
+CFARGUMENT  : TS 'argument' ;
 CFCASE      : TS 'case' ;
 CFCATCH     : TS 'catch' ;
 CFFUNCTION  : TS 'function' ;
@@ -154,14 +168,19 @@ ENDCFTRY    : TC 'try' TE ;
 // Attributes
 ATR_ACCESS      : 'access'      '=' STRING_LITERAL ;
 ATR_ARRAY       : 'array'       '=' STRING_LITERAL ;
+ATR_DEFAULT     : 'default'     '=' STRING_LITERAL ;
+ATR_DISPLAYNAME : 'displayname' '=' STRING_LITERAL ;
 ATR_FROM        : 'from'        '=' STRING_LITERAL ;
+ATR_HINT        : 'hint'        '=' STRING_LITERAL ;
 ATR_INDEX       : 'index'       '=' STRING_LITERAL ;
 ATR_LIST        : 'list'        '=' STRING_LITERAL ;
 ATR_NAME        : 'name'        '=' STRING_LITERAL ;
 ATR_OUTPUT      : 'output'      '=' STRING_LITERAL ;
 ATR_RETURNTYPE  : 'returntype'  '=' STRING_LITERAL ;
+ATR_REQUIRED    : 'required'    '=' STRING_LITERAL ;
 ATR_STEP        : 'step'        '=' STRING_LITERAL ;
 ATR_TO          : 'to'          '=' STRING_LITERAL ;
+ATR_TYPE        : 'type'        '=' STRING_LITERAL ;
 
 TE : '/'? '>' ; // Tag End
 
