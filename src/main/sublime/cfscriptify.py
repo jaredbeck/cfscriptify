@@ -3,8 +3,15 @@ import subprocess
 
 class CfscriptifyCommand(sublime_plugin.TextCommand):
 
+  def jars(self):
+    return [
+      "/Users/jared/git/cfscriptify/target/cfscriptify-0.0.1.jar"
+      , "/Users/jared/.m2/repository/org/antlr/antlr4-runtime/4.1/antlr4-runtime-4.1.jar"
+      , "/Users/jared/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar"
+    ]
+
   def java_classpath(self):
-    return '".:/Users/jared/git/cfscriptify/target:/Users/jared/git/cfscriptify/antlr-4.0-complete.jar:/Users/jared/git/cfscriptify/commons-lang3-3.1.jar:"'
+    return '".:{0}:"'.format(":".join(self.jars()))
 
   def run(self, edit):
     cfs_path = "/Users/jared/git/cfscriptify/run.sh"

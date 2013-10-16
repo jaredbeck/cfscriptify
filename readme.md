@@ -6,7 +6,7 @@ Converts [CFML][17] tags to [cfscript][16] using Java.
 Usage
 -----
 
-    mvn package
+    mvn -q package
     bin/test.rb
     bin/run.sh < input.cfm
 
@@ -25,8 +25,10 @@ Usage
 Nothing polished yet, but you can use `docs/sublime/cfscriptify.py`
 as a starting point.
 
+1. `mvn -q package`
+    * download dependencies into `~/.m2/repository`
 1. Tools -> New Plugin ..
-1. Paste in `src/sublime/cfscriptify.py`
+1. Paste in `src/main/sublime/cfscriptify.py`
 1. Update all the `/Users/jared` paths (sorry)
 1. Select some CFML
 1. Try your new plugin in sublime's python shell (ctrl-backtick)
