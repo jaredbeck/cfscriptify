@@ -1,7 +1,7 @@
 CFScriptify
 ===========
 
-Converts [CFML][17] tags to [cfscript][16] using Java.  ([video demo][25])
+Converts [CFML][17] to [cfscript][16] using Java.  ([video demo][25])
 
 Usage
 -----
@@ -11,7 +11,7 @@ Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8)
     mvn --version
     mvn -q package
     bin/test.rb
-    bin/run.sh < input.cfm
+    bin/run.sh < src/test/input/01.cfm
 
 ### Limitations
 
