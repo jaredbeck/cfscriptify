@@ -25,8 +25,7 @@ Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8)
 
 ### Sublime Text 2 Plugin
 
-Nothing polished yet, but you can use `docs/sublime/cfscriptify.py`
-as a starting point.
+Nothing polished yet, but here's a starting point:
 
 1. Make sure the tests (described above) pass
 1. Tools -> New Plugin ..
