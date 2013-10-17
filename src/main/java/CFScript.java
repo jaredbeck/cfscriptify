@@ -172,6 +172,9 @@ public class CFScript {
     if (ctx.positionalArguments() != null) {
       args = positionalArgumentsToString(ctx.positionalArguments());
     }
+    else if (ctx.namedArguments() != null) {
+      args = namedArgumentsToString(ctx.namedArguments());
+    }
     return String.format("%s(%s)", ref, args);
   }
 
