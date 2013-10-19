@@ -6,6 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CFScript {
 
+  public static String atrsToString(List<CFMLParser.AttributeContext> ctxs) {
+    Iterator<CFMLParser.AttributeContext> i = ctxs.iterator();
+    ArrayList strs = new ArrayList();
+    while(i.hasNext()) { strs.add(atrToString(i.next())); }
+    return StringUtils.join(strs.toArray(), " ");
+  }
+
   public static String argumentsToString(List<CFMLParser.TagArgumentContext> ctxs) {
     Iterator<CFMLParser.TagArgumentContext> i = ctxs.iterator();
     ArrayList strs = new ArrayList();
@@ -85,6 +92,12 @@ public class CFScript {
     }
 
     return result;
+  }
+
+  private static String atrToString(CFMLParser.AttributeContext ctx) {
+    String key = StringUtils.removeEnd(ctx.ATTRIBUTE_EQ().getText(), "=");
+    String value = ctx.STRING_LITERAL().getText();
+    return String.format("%s=%s", key, value);
   }
 
   private static String binaryOpToString(CFMLParser.BinaryOpContext ctx) {

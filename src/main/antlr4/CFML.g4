@@ -8,6 +8,7 @@ block : (blockTag | lineTag)* ;
 
 blockTag
   : cfcomment
+  | tagComponent
   | tagFunction
   | tagIf
   | tagLoop
@@ -36,7 +37,7 @@ cfcomment : CFCOMMENT ;
 
 tagBreak : CFBREAK ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
-tagInclude : CFINCLUDE 'template' '=' STRING_LITERAL TE ;
+tagInclude : CFINCLUDE attribute TE ;
 tagLoop : (tagLoopList | tagLoopArray | tagLoopFrom) ;
 tagLoopArray : CFLOOP (ATR_ARRAY | ATR_INDEX)* TE block ENDCFLOOP ;
 tagLoopFrom : CFLOOP (ATR_FROM | ATR_TO | ATR_INDEX | ATR_STEP)* TE block ENDCFLOOP ;
@@ -49,17 +50,20 @@ tagTry : CFTRY block tagCatch* tagFinally? ENDCFTRY ;
 tagCatch : CFCATCH ATR_TYPE? TE block ENDCFCATCH ;
 tagRethrow : CFRETHROW ;
 
-tagSwitch : CFSWITCH 'expression' '=' STRING_LITERAL TE tagCase* tagDefaultCase? ENDCFSWITCH ;
-tagCase   : CFCASE 'value' '=' STRING_LITERAL TE block ENDCFCASE ;
+tagSwitch : CFSWITCH attribute TE tagCase* tagDefaultCase? ENDCFSWITCH ;
+tagCase   : CFCASE attribute TE block ENDCFCASE ;
 tagDefaultCase : CFDEFAULTCASE block ENDCFDEFAULTCASE ;
+
+tagComponent : CFCOMPONENT attribute* TE block ENDCFCOMPONENT ;
+attribute : ATTRIBUTE_EQ STRING_LITERAL ;
 
 tagFunction
   : CFFUNCTION
   (
       ATR_NAME
       | ATR_RETURNTYPE
-      | ATR_OUTPUT
       | ATR_ACCESS
+      | attribute
   )*
   TE
   tagArgument*
@@ -73,10 +77,9 @@ tagArgument
   (
     ATR_NAME
     | ATR_DEFAULT
-    | ATR_DISPLAYNAME
-    | ATR_HINT
     | ATR_REQUIRED
     | ATR_TYPE
+    | attribute
   )*
   TE
   ;
@@ -143,6 +146,7 @@ CFTRY       : TS 'try' TE ;
 CFARGUMENT  : TS 'argument' ;
 CFCASE      : TS 'case' ;
 CFCATCH     : TS 'catch' ;
+CFCOMPONENT : TS 'component' ;
 CFFUNCTION  : TS 'function' ;
 CFINCLUDE   : TS 'include' ;
 CFLOOP      : TS 'loop' ;
@@ -156,6 +160,7 @@ CFSCRIPT    : TS 'script' TE .*? ENDCFSCRIPT ;
 // Closing tags
 ENDCFCASE   : TC 'case' TE ;
 ENDCFCATCH  : TC 'catch' TE ;
+ENDCFCOMPONENT : TC 'component' TE ;
 ENDCFDEFAULTCASE : TC 'defaultcase' TE ;
 ENDCFFINALLY : TC 'finally' TE ;
 ENDCFFUNCTION : TC 'function' TE ;
@@ -169,18 +174,20 @@ ENDCFTRY    : TC 'try' TE ;
 ATR_ACCESS      : 'access'      '=' STRING_LITERAL ;
 ATR_ARRAY       : 'array'       '=' STRING_LITERAL ;
 ATR_DEFAULT     : 'default'     '=' STRING_LITERAL ;
-ATR_DISPLAYNAME : 'displayname' '=' STRING_LITERAL ;
 ATR_FROM        : 'from'        '=' STRING_LITERAL ;
-ATR_HINT        : 'hint'        '=' STRING_LITERAL ;
 ATR_INDEX       : 'index'       '=' STRING_LITERAL ;
 ATR_LIST        : 'list'        '=' STRING_LITERAL ;
 ATR_NAME        : 'name'        '=' STRING_LITERAL ;
-ATR_OUTPUT      : 'output'      '=' STRING_LITERAL ;
 ATR_RETURNTYPE  : 'returntype'  '=' STRING_LITERAL ;
 ATR_REQUIRED    : 'required'    '=' STRING_LITERAL ;
 ATR_STEP        : 'step'        '=' STRING_LITERAL ;
 ATR_TO          : 'to'          '=' STRING_LITERAL ;
 ATR_TYPE        : 'type'        '=' STRING_LITERAL ;
+
+/* To avoid defining (highly repetitive) lexer rules for every
+attribute in CFML, handle some attributes generically.  This rule
+has a lower precedence than the specific attribute rules above. */
+ATTRIBUTE_EQ : [a-zA-Z]+ '=' ;
 
 TE : '/'? '>' ; // Tag End
 

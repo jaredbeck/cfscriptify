@@ -61,11 +61,12 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (18)
+### Supported (19)
 
 cfabort
 cfbreak
 cfcatch
+cfcomponent
 cfdefaultcase
 cfelse
 cfelseif
@@ -84,9 +85,9 @@ cftry
 
 ### Partially supported (4)
 
-[cfargument][23] is fully supported except that `hint` and
-`displayName` attributes are discarded, because the syntax for those
-attributes is [awkward][22] in cfscript.  I'd welcome a pull request.
+[cfargument][23] is supported except that `hint` and `displayName`
+attributes are discarded, because the syntax for those attributes
+is [awkward][22] in cfscript.  I'd welcome a pull request.
 
 [cfcase][14] is supported for single values.  List values are not supported yet.
 
@@ -100,9 +101,8 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (7)
+### Not Supported Yet (6)
 
-cfcomponent
 cfcontinue
 cfdump
 cfflush

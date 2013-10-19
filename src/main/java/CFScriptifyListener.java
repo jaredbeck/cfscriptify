@@ -18,6 +18,19 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	@Override public void enterTagComponent(CFMLParser.TagComponentContext ctx) {
+		String atrs = CFScript.atrsToString(ctx.attribute());
+		String line = "component ";
+		if (atrs.length() > 0) { line += atrs + " "; }
+		print(line + "{\n");
+		entab();
+	}
+
+	@Override public void exitTagComponent(CFMLParser.TagComponentContext ctx) {
+		detab();
+		print("}\n");
+	}
+
 	/* <cfreturn> */
 	@Override public void enterTagReturn(CFMLParser.TagReturnContext ctx) {
 		String expr = CFScript.expressionToString(ctx.expression());
@@ -41,7 +54,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfswitch> */
 	@Override public void enterTagSwitch(CFMLParser.TagSwitchContext ctx) {
-		String expression = trimOctothorps(CFScript.dequote(ctx.STRING_LITERAL().getText()));
+		String exprAttrText = ctx.attribute().STRING_LITERAL().getText();
+		String expression = trimOctothorps(CFScript.dequote(exprAttrText));
 		print("switch (" + expression + ") {\n");
 		entab();
 	}
@@ -53,7 +67,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfcase> */
 	@Override public void enterTagCase(CFMLParser.TagCaseContext ctx) {
-		String value = trimOctothorps(ctx.STRING_LITERAL().getText());
+		String value = trimOctothorps(ctx.attribute().STRING_LITERAL().getText());
 		print("case " + value + ":\n");
 		entab();
 	}
@@ -134,7 +148,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	}
 
 	@Override public void enterTagInclude(CFMLParser.TagIncludeContext ctx) {
-		print("include " + ctx.STRING_LITERAL().getText());
+		print("include " + ctx.attribute().STRING_LITERAL().getText());
 	}
 
 	/* <cfscript> */
