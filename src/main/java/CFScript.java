@@ -6,11 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CFScript {
 
-  public static String atrsToString(List<CFMLParser.AttributeContext> ctxs) {
+  public static String atrsToString(List<CFMLParser.AttributeContext> ctxs, String delimiter) {
     Iterator<CFMLParser.AttributeContext> i = ctxs.iterator();
     ArrayList strs = new ArrayList();
     while(i.hasNext()) { strs.add(atrToString(i.next())); }
-    return StringUtils.join(strs.toArray(), " ");
+    return StringUtils.join(strs.toArray(), delimiter);
   }
 
   public static String argumentsToString(List<CFMLParser.TagArgumentContext> ctxs) {

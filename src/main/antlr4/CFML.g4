@@ -21,6 +21,7 @@ lineTag
   : tagAbort
   | tagBreak
   | tagInclude
+  | tagLog
   | tagParam
   | tagRethrow
   | tagSet
@@ -38,6 +39,7 @@ cfcomment : CFCOMMENT ;
 tagBreak : CFBREAK ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE attribute TE ;
+tagLog : CFLOG ( attribute | ATR_TYPE )* TE ;
 tagLoop : (tagLoopList | tagLoopArray | tagLoopFrom) ;
 tagLoopArray : CFLOOP (ATR_ARRAY | ATR_INDEX)* TE block ENDCFLOOP ;
 tagLoopFrom : CFLOOP (ATR_FROM | ATR_TO | ATR_INDEX | ATR_STEP)* TE block ENDCFLOOP ;
@@ -149,6 +151,7 @@ CFCATCH     : TS 'catch' ;
 CFCOMPONENT : TS 'component' ;
 CFFUNCTION  : TS 'function' ;
 CFINCLUDE   : TS 'include' ;
+CFLOG       : TS 'log' ;
 CFLOOP      : TS 'loop' ;
 CFPARAM     : TS 'param' .*? TE ;
 CFSWITCH    : TS 'switch' ;

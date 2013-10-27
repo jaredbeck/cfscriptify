@@ -18,8 +18,17 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	@Override public void enterTagLog(CFMLParser.TagLogContext ctx) {
+		String atrs = CFScript.atrsToString(ctx.attribute(), ", ");
+		if (ctx.ATR_TYPE().size() > 0) {
+			String type = CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_TYPE()));
+			atrs += String.format(", type=\"%s\"", type);
+		}
+		print(String.format("WriteLog(%s)", atrs));
+	}
+
 	@Override public void enterTagComponent(CFMLParser.TagComponentContext ctx) {
-		String atrs = CFScript.atrsToString(ctx.attribute());
+		String atrs = CFScript.atrsToString(ctx.attribute(), " ");
 		String line = "component ";
 		if (atrs.length() > 0) { line += atrs + " "; }
 		print(line + "{\n");
