@@ -11,7 +11,7 @@ public class Function extends Scriptable {
   }
 
   public String toString() {
-    String name   = CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_NAME()));
+    String name   = CFScript.dequote(attrs.get("name"));
     String rtyp   = CFScript.dequote(attrs.get("returntype"));
     String access = CFScript.dequote(attrs.get("access"));
     String args   = CFScript.argumentsToString(ctx.tagArgument());

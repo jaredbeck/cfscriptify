@@ -21,9 +21,8 @@ public class Argument extends Scriptable {
       base.add(CFScript.atrVal(typ));
     }
 
-    String name = CFScript.firstTextIn(ctx.ATR_NAME());
-    if (name.length() > 0) {
-      base.add(CFScript.atrVal(name));
+    if (attrs.containsKey("name")) {
+      base.add(CFScript.dequote(attrs.get("name")));
     }
 
     String result = StringUtils.join(base.toArray(), " ");

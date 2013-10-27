@@ -61,10 +61,7 @@ attribute : ATTRIBUTE_EQ STRING_LITERAL ;
 
 tagFunction
   : CFFUNCTION
-  (
-      ATR_NAME
-      | attribute
-  )*
+  attribute*
   TE
   tagArgument*
   block
@@ -75,8 +72,7 @@ tagFunction
 tagArgument
   : CFARGUMENT
   (
-    ATR_NAME
-    | ATR_TYPE
+    ATR_TYPE
     | attribute
   )*
   TE
@@ -173,7 +169,6 @@ ENDCFTRY    : TC 'try' TE ;
 ATR_ARRAY       : 'array'       '=' STRING_LITERAL ;
 ATR_INDEX       : 'index'       '=' STRING_LITERAL ;
 ATR_LIST        : 'list'        '=' STRING_LITERAL ;
-ATR_NAME        : 'name'        '=' STRING_LITERAL ;
 ATR_TYPE        : 'type'        '=' STRING_LITERAL ;
 
 /* To avoid defining (highly repetitive) lexer rules for every
