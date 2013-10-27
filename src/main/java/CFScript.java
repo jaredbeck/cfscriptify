@@ -30,6 +30,11 @@ public class CFScript {
     return dequote(assignment.split("=")[1]);
   }
 
+  public static String ctxSubstr(String ctxText, int start) {
+    if (ctxText.length() <= start) { return ""; }
+    return StringUtils.chop(ctxText.substring(start));
+  }
+
   public static String dequote(String str) {
     String q = str.substring(0, 1);
     String esc = StringUtils.repeat(q, 2);
@@ -61,6 +66,10 @@ public class CFScript {
     else {
       return l.get(0).getText();
     }
+  }
+
+  public static String trimOctothorps(String s) {
+    return StringUtils.strip(s, "#");
   }
 
   // Private Methods

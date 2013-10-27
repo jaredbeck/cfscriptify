@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.ErrorNode;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 public class CFScriptifyListener extends CFMLBaseListener {
 
@@ -59,7 +58,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	/* <cfswitch> */
 	@Override public void enterTagSwitch(CFMLParser.TagSwitchContext ctx) {
 		String exprAttrText = ctx.attribute().STRING_LITERAL().getText();
-		String expression = trimOctothorps(CFScript.dequote(exprAttrText));
+		String expression = CFScript.trimOctothorps(CFScript.dequote(exprAttrText));
 		print("switch (" + expression + ") {\n");
 		entab();
 	}
@@ -71,7 +70,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfcase> */
 	@Override public void enterTagCase(CFMLParser.TagCaseContext ctx) {
-		String value = trimOctothorps(ctx.attribute().STRING_LITERAL().getText());
+		String value = CFScript.trimOctothorps(ctx.attribute().STRING_LITERAL().getText());
 		print("case " + value + ":\n");
 		entab();
 	}
@@ -110,7 +109,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfthrow> */
 	@Override public void enterTagThrow(CFMLParser.TagThrowContext ctx) {
-		String args = ctxSubstr(ctx.CFTHROW().getText(), 9);
+		String args = CFScript.ctxSubstr(ctx.CFTHROW().getText(), 9);
 		print("Throw(" + args + ")");
 	}
 
@@ -144,7 +143,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	}
 
 	@Override public void enterTagParam(CFMLParser.TagParamContext ctx) {
-		print("param" + ctxSubstr(ctx.CFPARAM().getText(), 8));
+		print("param" + CFScript.ctxSubstr(ctx.CFPARAM().getText(), 8));
 	}
 
 	@Override public void enterTagBreak(CFMLParser.TagBreakContext ctx) {
@@ -167,20 +166,11 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfloop from="" to="" index="" step=""> */
 	@Override public void enterTagLoopFrom(CFMLParser.TagLoopFromContext ctx) {
-		String from 	= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_FROM()), 6));
-		String to 		= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_TO()), 4));
-		String index 	= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7));
-		String step 	= trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_STEP()), 6));
-		if (step.length() == 0) { step = "1"; }
-		String op = loopComparison(from, to, step);
-
-		String begin = String.format("%s = %s", index, from);
-		String middle = String.format("%s %s %s", descope(index), op, to);
-		String end = stepStmt(descope(index), step);
-
-		print(String.format("for (%s; %s; %s) {\n", begin, middle, end));
+		ForLoop l = new ForLoop(ctx);
+		print(l.toString());
+		print(" {\n");
 		entab();
-		if (op == "NEQ") { printWarning("is NEQ what you wanted?"); }
+		if (l.op() == "NEQ") { printWarning("is NEQ what you wanted?"); }
 	}
 
 	@Override public void exitTagLoopFrom(CFMLParser.TagLoopFromContext ctx) {
@@ -190,8 +180,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfloop array="" index=""> */
 	@Override public void enterTagLoopArray(CFMLParser.TagLoopArrayContext ctx) {
-		String array = trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_ARRAY()), 7));
-		String index = ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
+		String array = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_ARRAY()), 7));
+		String index = CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
 		print ("for (" + index + " in " + array + ") {\n");
 		entab();
 	}
@@ -203,8 +193,8 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfloop list="" index=""> */
 	@Override public void enterTagLoopList(CFMLParser.TagLoopListContext ctx) {
-		String list = trimOctothorps(ctxSubstr(CFScript.firstTextIn(ctx.ATR_LIST()), 6));
-		String index = ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
+		String list = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_LIST()), 6));
+		String index = CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
 		print("for (" + index + " in ListToArray(" + list + ")) {\n");
 		entab();
 	}
@@ -270,39 +260,12 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		return matcher.find() ? matcher.end() : 0;
 	}
 
-	private String ctxSubstr(String ctxText, int start) {
-		if (ctxText.length() <= start) { return ""; }
-		return StringUtils.chop(ctxText.substring(start));
-	}
-
-	private String descope(String dotScoped) {
-		String[] parts = dotScoped.split("\\.");
-		return parts[parts.length - 1];
-	}
-
 	private void detab() {
 		if (depth > 0) { depth --; }
 	}
 
 	private void entab() {
 		depth ++;
-	}
-
-	private String loopComparison(String from, String to, String step) {
-		boolean direction;
-		if (NumberUtils.isNumber(step)) {
-			direction = Double.parseDouble(step) > 0; // true means ascending
-		}
-		else if (NumberUtils.isNumber(from) && NumberUtils.isNumber(to)) {
-			direction = Double.parseDouble(from) < Double.parseDouble(to);
-		}
-		else {
-			/* If none of the attributes are numeric, we can't determine
-			the direction.  The best possible guess is NEQ.  Thankfully,
-			a non-numeric step is quite uncommon. */
-			return "NEQ";
-		}
-		return direction ? "LTE" : "GTE";
 	}
 
 	private int firstLineOffset(String[] lines) {
@@ -319,21 +282,5 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	private void printWarning(String s) {
 		print("/* cfscriptify warning: " + s + " */\n");
-	}
-
-	private String stepStmt(String index, String step) {
-		try {
-			int s = Integer.parseInt(step);
-			if (s == 1) { return index + "++"; }
-			else if (s == -1) { return index + "--"; }
-			else { return index + " += " + String.valueOf(s); }
-		}
-		catch (NumberFormatException e) {
-			return index + " += " + step;
-		}
-	}
-
-	private String trimOctothorps(String s) {
-		return StringUtils.strip(s, "#");
 	}
 }
