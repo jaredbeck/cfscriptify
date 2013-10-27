@@ -101,16 +101,15 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (6)
+### Not Supported Yet (5)
 
 cfcontinue
 cfdump
-cfflush
 cflocation
 cflock
 cflog
 
-### No Plans to Support (118)
+### No Plans to Support (119)
 
 These tags either do not have convenient cfscript equivalents, have
 complicated varients (eg. cffile), or are too rare to be worth the
@@ -148,6 +147,7 @@ cfexit
 cffeed
 cffile
 cffileupload
+cfflush
 cfform
 cfformgroup
 cfformitem
