@@ -1,12 +1,29 @@
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-public class ForLoop {
+public class ForLoop extends Scriptable {
 
   private CFMLParser.TagLoopFromContext ctx;
+  private Map<String, String> attrs;
   private String op;
+  private String index;
+  private String from;
+  private String to;
+  private String step;
 
   public ForLoop(CFMLParser.TagLoopFromContext ctx) {
     this.ctx = ctx;
+    attrs  = attrMap(ctx.attribute());
+    index  = getIndex();
+    from   = getFrom();
+    to     = getTo();
+    step   = getStep();
+    op     = loopComparison(from, to, step);
   }
 
   public String op() {
@@ -14,18 +31,32 @@ public class ForLoop {
   }
 
   public String toString() {
-    String from   = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_FROM()), 6));
-    String to     = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_TO()), 4));
-    String index  = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7));
-    String step   = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_STEP()), 6));
-    if (step.length() == 0) { step = "1"; }
-    this.op = loopComparison(from, to, step);
-
     String begin = String.format("%s = %s", index, from);
     String middle = String.format("%s %s %s", descope(index), op, to);
     String end = stepStmt(descope(index), step);
-
     return String.format("for (%s; %s; %s)", begin, middle, end);
+  }
+
+  private String getIndex() {
+    return CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7));
+  }
+
+  private String getFrom() {
+    return CFScript.trimOctothorps(CFScript.dequote(attrs.get("from")));
+  }
+
+  private String getTo() {
+    return CFScript.trimOctothorps(CFScript.dequote(attrs.get("to")));
+  }
+
+  private String getStep() {
+    String result = "";
+    if (attrs.containsKey("step")) {
+      result = CFScript.trimOctothorps(CFScript.dequote(attrs.get("step")));
+    } else {
+      result = "1";
+    }
+    return result;
   }
 
   private String descope(String dotScoped) {

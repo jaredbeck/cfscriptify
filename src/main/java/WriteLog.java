@@ -1,4 +1,4 @@
-public class WriteLog {
+public class WriteLog extends Scriptable {
 
   private CFMLParser.TagLogContext ctx;
 
