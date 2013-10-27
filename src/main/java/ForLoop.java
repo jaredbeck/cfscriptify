@@ -6,9 +6,9 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-public class ForLoop extends Scriptable {
+public class ForLoop extends Loop {
 
-  private CFMLParser.TagLoopFromContext ctx;
+  private CFMLParser.TagLoopContext ctx;
   private Map<String, String> attrs;
   private String op;
   private String index;
@@ -16,7 +16,7 @@ public class ForLoop extends Scriptable {
   private String to;
   private String step;
 
-  public ForLoop(CFMLParser.TagLoopFromContext ctx) {
+  public ForLoop(CFMLParser.TagLoopContext ctx) {
     this.ctx = ctx;
     attrs  = attrMap(ctx.attribute());
     index  = getIndex();
@@ -26,8 +26,8 @@ public class ForLoop extends Scriptable {
     op     = loopComparison(from, to, step);
   }
 
-  public String op() {
-    return this.op;
+  @Override public boolean hasWarning() {
+    return this.op.equals("NEQ");
   }
 
   public String toString() {
@@ -37,8 +37,12 @@ public class ForLoop extends Scriptable {
     return String.format("for (%s; %s; %s)", begin, middle, end);
   }
 
+  @Override public String warning() {
+    return "is NEQ what you wanted?";
+  }
+
   private String getIndex() {
-    return CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7));
+    return CFScript.trimOctothorps(CFScript.dequote(attrs.get("index")));
   }
 
   private String getFrom() {

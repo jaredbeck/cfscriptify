@@ -159,42 +159,19 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		}
 	}
 
-	/* <cfloop from="" to="" index="" step=""> */
-	@Override public void enterTagLoopFrom(CFMLParser.TagLoopFromContext ctx) {
-		ForLoop l = new ForLoop(ctx);
-		print(l.toString());
-		print(" {\n");
+	@Override public void enterTagLoop(CFMLParser.TagLoopContext ctx) {
+		Loop loop = null;
+		if (Scriptable.hasKey(ctx.attribute(), "from")) {
+			loop = new ForLoop(ctx);
+		} else {
+			loop = new ForInLoop(ctx);
+		}
+		print(loop.toString() + " {\n");
 		entab();
-		if (l.op() == "NEQ") { printWarning("is NEQ what you wanted?"); }
+		if (loop.hasWarning()) { printWarning(loop.warning()); }
 	}
 
-	@Override public void exitTagLoopFrom(CFMLParser.TagLoopFromContext ctx) {
-		detab();
-		print("}\n");
-	}
-
-	/* <cfloop array="" index=""> */
-	@Override public void enterTagLoopArray(CFMLParser.TagLoopArrayContext ctx) {
-		String array = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_ARRAY()), 7));
-		String index = CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
-		print ("for (" + index + " in " + array + ") {\n");
-		entab();
-	}
-
-	@Override public void exitTagLoopArray(CFMLParser.TagLoopArrayContext ctx) {
-		detab();
-		print("}\n");
-	}
-
-	/* <cfloop list="" index=""> */
-	@Override public void enterTagLoopList(CFMLParser.TagLoopListContext ctx) {
-		String list = CFScript.trimOctothorps(CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_LIST()), 6));
-		String index = CFScript.ctxSubstr(CFScript.firstTextIn(ctx.ATR_INDEX()), 7);
-		print("for (" + index + " in ListToArray(" + list + ")) {\n");
-		entab();
-	}
-
-	@Override public void exitTagLoopList(CFMLParser.TagLoopListContext ctx) {
+	@Override public void exitTagLoop(CFMLParser.TagLoopContext ctx) {
 		detab();
 		print("}\n");
 	}

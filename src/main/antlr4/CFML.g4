@@ -40,10 +40,7 @@ tagBreak : CFBREAK ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE attribute TE ;
 tagLog : CFLOG ( attribute | ATR_TYPE )* TE ;
-tagLoop : (tagLoopList | tagLoopArray | tagLoopFrom) ;
-tagLoopArray : CFLOOP (ATR_ARRAY | ATR_INDEX)* TE block ENDCFLOOP ;
-tagLoopFrom : CFLOOP (attribute | ATR_INDEX )* TE block ENDCFLOOP ;
-tagLoopList : CFLOOP (ATR_LIST | ATR_INDEX)* TE block ENDCFLOOP ;
+tagLoop : CFLOOP attribute* TE block ENDCFLOOP ;
 tagParam : CFPARAM ;
 tagScript : CFSCRIPT ;
 tagThrow : CFTHROW ;
@@ -166,9 +163,6 @@ ENDCFSWITCH : TC 'switch' TE ;
 ENDCFTRY    : TC 'try' TE ;
 
 // Attributes
-ATR_ARRAY       : 'array'       '=' STRING_LITERAL ;
-ATR_INDEX       : 'index'       '=' STRING_LITERAL ;
-ATR_LIST        : 'list'        '=' STRING_LITERAL ;
 ATR_TYPE        : 'type'        '=' STRING_LITERAL ;
 
 /* To avoid defining (highly repetitive) lexer rules for every

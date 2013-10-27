@@ -7,16 +7,30 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Scriptable {
 
+  public static boolean hasKey(List<CFMLParser.AttributeContext> ctxs, String k) {
+    boolean result = false;
+    Iterator<CFMLParser.AttributeContext> i = ctxs.iterator();
+    while(!result && i.hasNext()) {
+      result = key(i.next()).equals(k);
+    }
+    return result;
+  }
+
   protected Map attrMap(List<CFMLParser.AttributeContext> ctxs) {
     Map attrs = new HashMap();
     Iterator<CFMLParser.AttributeContext> i = ctxs.iterator();
     while(i.hasNext()) {
       CFMLParser.AttributeContext c = i.next();
-      String key = StringUtils.removeEnd(c.ATTRIBUTE_EQ().getText(), "=");
-      String value = c.STRING_LITERAL().getText();
-      attrs.put(key, value);
+      attrs.put(key(c), value(c));
     }
     return attrs;
   }
 
+  private static String key(CFMLParser.AttributeContext c) {
+    return StringUtils.removeEnd(c.ATTRIBUTE_EQ().getText(), "=");
+  }
+
+  private static String value(CFMLParser.AttributeContext c) {
+    return c.STRING_LITERAL().getText();
+  }
 }
