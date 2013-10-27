@@ -16,9 +16,8 @@ public class Argument extends Scriptable {
     ArrayList base = new ArrayList();
     if (isRequired()) { base.add("required"); }
 
-    String typ = CFScript.firstTextIn(ctx.ATR_TYPE());
-    if (typ.length() > 0) {
-      base.add(CFScript.atrVal(typ));
+    if (attrs.containsKey("type")) {
+      base.add(CFScript.dequote(attrs.get("type")));
     }
 
     if (attrs.containsKey("name")) {

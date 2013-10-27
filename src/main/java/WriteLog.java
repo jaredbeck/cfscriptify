@@ -11,11 +11,6 @@ public class WriteLog extends Scriptable {
   }
 
   private String atrs() {
-    String atrs = CFScript.atrsToString(ctx.attribute(), ", ");
-    if (ctx.ATR_TYPE().size() > 0) {
-      String type = CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_TYPE()));
-      atrs += String.format(", type=\"%s\"", type);
-    }
-    return atrs;
+    return CFScript.atrsToString(ctx.attribute(), ", ");
   }
 }

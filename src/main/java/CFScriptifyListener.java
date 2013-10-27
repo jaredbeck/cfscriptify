@@ -115,9 +115,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfcatch type="foo"> */
 	@Override public void enterTagCatch(CFMLParser.TagCatchContext ctx) {
-		TerminalNode atrType = ctx.ATR_TYPE();
-		String type = (atrType == null) ? "any" : CFScript.atrVal(atrType.getText());
-		print("catch(" + type + " cfcatch) {\n");
+		print(new SCatch(ctx).toString() + " {\n");
 		entab();
 	}
 

@@ -39,14 +39,14 @@ cfcomment : CFCOMMENT ;
 tagBreak : CFBREAK ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE attribute TE ;
-tagLog : CFLOG ( attribute | ATR_TYPE )* TE ;
+tagLog : CFLOG attribute* TE ;
 tagLoop : CFLOOP attribute* TE block ENDCFLOOP ;
 tagParam : CFPARAM ;
 tagScript : CFSCRIPT ;
 tagThrow : CFTHROW ;
 tagAbort : CFABORT ;
 tagTry : CFTRY block tagCatch* tagFinally? ENDCFTRY ;
-tagCatch : CFCATCH ATR_TYPE? TE block ENDCFCATCH ;
+tagCatch : CFCATCH attribute? TE block ENDCFCATCH ;
 tagRethrow : CFRETHROW ;
 
 tagSwitch : CFSWITCH attribute TE tagCase* tagDefaultCase? ENDCFSWITCH ;
@@ -68,10 +68,7 @@ tagFunction
 
 tagArgument
   : CFARGUMENT
-  (
-    ATR_TYPE
-    | attribute
-  )*
+  attribute*
   TE
   ;
 
@@ -162,12 +159,8 @@ ENDCFSCRIPT : TC 'script' TE ;
 ENDCFSWITCH : TC 'switch' TE ;
 ENDCFTRY    : TC 'try' TE ;
 
-// Attributes
-ATR_TYPE        : 'type'        '=' STRING_LITERAL ;
-
 /* To avoid defining (highly repetitive) lexer rules for every
-attribute in CFML, handle some attributes generically.  This rule
-has a lower precedence than the specific attribute rules above. */
+attribute in CFML, handle attributes generically. */
 ATTRIBUTE_EQ : [a-zA-Z]+ '=' ;
 
 TE : '/'? '>' ; // Tag End
