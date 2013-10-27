@@ -76,8 +76,6 @@ tagArgument
   : CFARGUMENT
   (
     ATR_NAME
-    | ATR_DEFAULT
-    | ATR_REQUIRED
     | ATR_TYPE
     | attribute
   )*
@@ -173,11 +171,9 @@ ENDCFTRY    : TC 'try' TE ;
 
 // Attributes
 ATR_ARRAY       : 'array'       '=' STRING_LITERAL ;
-ATR_DEFAULT     : 'default'     '=' STRING_LITERAL ;
 ATR_INDEX       : 'index'       '=' STRING_LITERAL ;
 ATR_LIST        : 'list'        '=' STRING_LITERAL ;
 ATR_NAME        : 'name'        '=' STRING_LITERAL ;
-ATR_REQUIRED    : 'required'    '=' STRING_LITERAL ;
 ATR_TYPE        : 'type'        '=' STRING_LITERAL ;
 
 /* To avoid defining (highly repetitive) lexer rules for every

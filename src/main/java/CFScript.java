@@ -76,31 +76,7 @@ public class CFScript {
   // ---------------
 
   private static String argumentToString(CFMLParser.TagArgumentContext ctx) {
-    ArrayList base = new ArrayList();
-
-    String req = firstTextIn(ctx.ATR_REQUIRED());
-    if (req.length() > 0 && truthyAttr(atrVal(req))) {
-      base.add("required");
-    }
-
-    String typ = firstTextIn(ctx.ATR_TYPE());
-    if (typ.length() > 0) {
-      base.add(atrVal(typ));
-    }
-
-    String name = firstTextIn(ctx.ATR_NAME());
-    if (name.length() > 0) {
-      base.add(atrVal(name));
-    }
-
-    String result = StringUtils.join(base.toArray(), " ");
-
-    String dflt = firstTextIn(ctx.ATR_DEFAULT());
-    if (dflt.length() > 0) {
-      result += String.format(" = \"%s\"", atrVal(dflt));
-    }
-
-    return result;
+    return new Argument(ctx).toString();
   }
 
   private static String atrToString(CFMLParser.AttributeContext ctx) {
@@ -170,10 +146,6 @@ public class CFScript {
       str = arrayIndexToString(ctx.arrayIndex());
     }
     return str;
-  }
-
-  private static boolean truthyAttr(String s) {
-    return s.equalsIgnoreCase("true") || s.equalsIgnoreCase("yes");
   }
 
   private static String arrayIndexToString(CFMLParser.ArrayIndexContext ctx) {
