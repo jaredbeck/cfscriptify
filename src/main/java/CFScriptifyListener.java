@@ -41,11 +41,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cffunction> */
 	@Override public void enterTagFunction(CFMLParser.TagFunctionContext ctx) {
-		String name 	= CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_NAME()));
-		String rtyp 	= CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_RETURNTYPE()));
-		String access = CFScript.atrVal(CFScript.firstTextIn(ctx.ATR_ACCESS()));
-		String args = CFScript.argumentsToString(ctx.tagArgument());
-		print(String.format("%s %s function %s(%s) {\n", access, rtyp, name, args));
+		print(new Function(ctx).toString() + " {\n");
 		entab();
 	}
 
