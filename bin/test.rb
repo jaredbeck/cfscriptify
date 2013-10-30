@@ -2,6 +2,8 @@
 
 $stdout.sync = true
 
+require 'open3'
+
 class Test
   attr_reader :number, :infile, :outfile
 
@@ -10,30 +12,39 @@ class Test
     @outfile = outfile
     @number = File.basename(@infile.path, ".cfm")
   end
+end
 
-  def run
-    system "bin/run.sh < #{infile.path} > #{tmp_file_path}"
-    result = File.read(tmp_file_path)
-    expected = outfile.read
-    pass = result == expected
-    if (pass)
-      green "."
-    else
-      red "\nTest #{number.to_i} failed:\n"
-      system "diff -U 3 #{tmp_file_path} #{outfile.path} | tail +4"
+class Result
+  attr_reader :test, :actual
+
+  TMP_FILE = "/tmp/cfscriptify_test"
+
+  def initialize test, actual
+    @test = test
+    @actual = actual
+  end
+
+  def print
+    expected = test.outfile.read
+    if expected != actual
+      red "Test #{number} failed\n"
+      File.open(TMP_FILE, "w") { |f| f.write(actual) }
+      system "diff -U 3 #{test.outfile.path} #{TMP_FILE} | tail +4"
     end
   end
 
+  private
+
   def green str
-    print "\e[32m" + str.to_s + "\e[0m"
+    $stdout.print "\e[32m" + str.to_s + "\e[0m"
   end
 
   def red str
-    print "\e[31m" + str.to_s + "\e[0m"
+    $stdout.print "\e[31m" + str.to_s + "\e[0m"
   end
 
-  def tmp_file_path
-    "/tmp/cfscriptify_test"
+  def number
+    test.number
   end
 end
 
@@ -42,8 +53,33 @@ class TestSuite
   OUTPUTS = 'src/test/output'
 
   def run
-    tests.map(&:run)
-    puts # LF
+    results.each(&:print)
+  end
+
+  private
+
+  def results
+    run_concatenated.zip(tests).map { |a| Result.new(a[1], a[0]) }
+  end
+
+  def run_concatenated
+    Open3.popen3(cmd) { |stdin, stdout, stderr, wait_thr|
+      tests.each do |test|
+        stdin.print test.infile.read
+        stdin.print "<!--- most awkward delimiter, ever --->"
+      end
+      stdin.close
+      $stderr.print(stderr.read)
+      stdout.read
+    }.split("/* most awkward delimiter, ever */\n")
+  end
+
+  def classpath
+    File.open("classpath.txt", "r").read + ":target/cfscriptify-0.0.1.jar"
+  end
+
+  def cmd
+    "java -classpath '#{classpath}' CFScriptify"
   end
 
   def paths
