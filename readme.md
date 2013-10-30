@@ -61,12 +61,13 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (20)
+### Supported (21)
 
 cfabort
 cfbreak
 cfcatch
 cfcomponent
+cfcontinue
 cfdefaultcase
 cfelse
 cfelseif
@@ -102,9 +103,8 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### Not Supported Yet (4)
+### Not Supported Yet (3)
 
-cfcontinue
 cfdump
 cflocation
 cflock

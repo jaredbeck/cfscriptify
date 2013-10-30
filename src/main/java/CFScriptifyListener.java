@@ -139,6 +139,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		print("param" + CFScript.ctxSubstr(ctx.CFPARAM().getText(), 8));
 	}
 
+	@Override public void enterTagContinue(CFMLParser.TagContinueContext ctx) {
+		print("continue");
+	}
+
 	@Override public void enterTagBreak(CFMLParser.TagBreakContext ctx) {
 		print("break");
 	}

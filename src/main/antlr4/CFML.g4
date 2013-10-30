@@ -20,6 +20,7 @@ blockTag
 lineTag
   : tagAbort
   | tagBreak
+  | tagContinue
   | tagInclude
   | tagLog
   | tagParam
@@ -37,6 +38,7 @@ cfcomment : CFCOMMENT ;
 // --------------------------------------------
 
 tagBreak : CFBREAK ;
+tagContinue : CFCONTINUE ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE attribute TE ;
 tagLog : CFLOG attribute* TE ;
@@ -124,6 +126,7 @@ CFRETURN    : TS 'return' ;
 // Tags with no attributes or expressions
 CFABORT     : TS 'abort' TE ;
 CFBREAK     : TS 'break' TE ;
+CFCONTINUE  : TS 'continue' TE ;
 CFDEFAULTCASE : TS 'defaultcase' TE ;
 CFELSE      : TS 'else' TE ;
 CFFINALLY   : TS 'finally' TE ;
@@ -750,5 +753,5 @@ fragment SingleStringCharacter
   | '\'\''
   ;
 
-fragment TC : '</cf' ; // Tag Close
 fragment TS : '<cf' ; // Tag Start
+fragment TC : '</cf' ; // Tag Close
