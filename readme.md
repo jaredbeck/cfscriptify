@@ -9,8 +9,7 @@ Usage
 Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8)
 
     mvn --version
-    mvn -q package
-    # edit bin/run.sh, fixing the hardcoded jar paths (sorry!)
+    mvn -q assembly:assembly
     bin/test.rb
     bin/run.sh < src/test/input/01.cfm
 
@@ -31,7 +30,7 @@ Nothing polished yet, but here's a starting point:
 1. Make sure the tests (described above) pass
 1. Tools -> New Plugin ..
 1. Paste in `src/main/sublime/cfscriptify.py`
-1. Update all the `/Users/jared` paths (sorry)
+1. Edit `cfs_path()` to return the path to `run.sh`
 1. Select some CFML
 1. Try your new plugin in sublime's python shell (ctrl-backtick)
     * `view.run_command("cfscriptify")`

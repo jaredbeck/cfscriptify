@@ -26,8 +26,10 @@ class Result
 
   def print
     expected = test.outfile.read
-    if expected != actual
-      red "Test #{number} failed\n"
+    if expected == actual
+      green "."
+    else
+      red "\nTest #{number} failed\n"
       File.open(TMP_FILE, "w") { |f| f.write(actual) }
       system "diff -U 3 #{test.outfile.path} #{TMP_FILE} | tail +4"
     end
@@ -54,6 +56,7 @@ class TestSuite
 
   def run
     results.each(&:print)
+    puts # LF
   end
 
   private
@@ -74,12 +77,8 @@ class TestSuite
     }.split("/* most awkward delimiter, ever */\n")
   end
 
-  def classpath
-    File.open("classpath.txt", "r").read + ":target/cfscriptify-0.0.1.jar"
-  end
-
   def cmd
-    "java -classpath '#{classpath}' CFScriptify"
+    "java -jar target/cfscriptify-0.0.1-jar-with-dependencies.jar"
   end
 
   def paths

@@ -70,27 +70,21 @@
         </configuration>
       </plugin>
 
-      <!--
-      * http://maven.apache.org/plugins/maven-dependency-plugin
-      * http://maven.apache.org/plugins/maven-dependency-plugin/build-classpath-mojo.html
-      -->
+      <!-- With this plugin, `mvn assembly:assembly` will build an
+      "uber jar" at `target/cfscriptify-0.0.1-jar-with-dependencies.jar`
+      http://bit.ly/7RzYjS -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.8</version>
-        <executions>
-          <execution>
-            <id>build-classpath</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>build-classpath</goal>
-            </goals>
-            <configuration>
-              <outputFile>classpath.txt</outputFile>
-              <includeScope>runtime</includeScope>
-            </configuration>
-          </execution>
-        </executions>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>CFScriptify</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>
