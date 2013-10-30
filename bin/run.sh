@@ -3,12 +3,17 @@ set -e
 
 function cfscriptify {
 
-  # TODO: Omit `/Users/jared` ..
-  # Can maven spit out the classpath?
-  local jar1="/Users/jared/git/cfscriptify/target/cfscriptify-0.0.1.jar"
-  local jar2="/Users/jared/.m2/repository/org/antlr/antlr4-runtime/4.1/antlr4-runtime-4.1.jar"
-  local jar3="/Users/jared/.m2/repository/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar"
-  local classpath="$jar1:$jar2:$jar3"
+  if [ ! -f 'target/cfscriptify-0.0.1.jar' ]; then
+    echo "File not found: target/cfscriptify-0.0.1.jar" 1>&2
+    echo 'Did you run `mvn package` yet?' 1>&2
+  fi
+
+  if [ ! -f 'classpath.txt' ]; then
+    echo "File not found: classpath.txt" 1>&2
+    echo 'Did you run `mvn package` yet?' 1>&2
+  fi
+
+  local classpath="$(cat classpath.txt):target/cfscriptify-0.0.1.jar"
 
   # CFScriptify.main() reads from stdin, so we pass stdin to java with
   # `<&0`. Also, main() takes zero  arguments, but we pass them anyway
