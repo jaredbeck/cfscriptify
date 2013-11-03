@@ -78,7 +78,7 @@ class TestSuite
   end
 
   def cmd
-    "java -jar target/cfscriptify-0.0.1-jar-with-dependencies.jar"
+    "java -jar target/cfscriptify-0.0.1.jar"
   end
 
   def paths

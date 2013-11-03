@@ -9,7 +9,7 @@ Usage
 Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8)
 
     mvn --version
-    mvn -q assembly:assembly
+    mvn -q compile assembly:single
     bin/test.rb
     bin/run.sh < src/test/input/01.cfm
 

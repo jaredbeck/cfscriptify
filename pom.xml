@@ -70,11 +70,12 @@
         </configuration>
       </plugin>
 
-      <!-- With this plugin, `mvn assembly:assembly` will build an
-      "uber jar" at `target/cfscriptify-0.0.1-jar-with-dependencies.jar`
-      http://bit.ly/7RzYjS -->
+      <!-- maven-assembly-plugin provides `assembly:single` goal
+      which builds an "uber jar" at `target/cfscriptify-0.0.1.jar`
+      http://bit.ly/3SzMmB -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
         <configuration>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -84,6 +85,7 @@
               <mainClass>CFScriptify</mainClass>
             </manifest>
           </archive>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>
     </plugins>
