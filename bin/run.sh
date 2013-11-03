@@ -9,15 +9,15 @@ function abs_path_to_cfs_jar {
   echo -n "$cfs_dir/../target/$jar_filename"
 }
 
-# `dir_of_this_script` - See http://bit.ly/mS6MnB
-function dir_of_this_script {
-  echo -n "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-}
-
 function cfscriptify {
   local jar="$(abs_path_to_cfs_jar)"
   verify_jar_exists "$jar"
   java -jar "$jar" <&0
+}
+
+# `dir_of_this_script` - See http://bit.ly/mS6MnB
+function dir_of_this_script {
+  echo -n "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 }
 
 function verify_jar_exists {
