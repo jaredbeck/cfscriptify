@@ -1,25 +1,36 @@
 #!/usr/bin/env bash
 set -e
 
+# `abs_path_to_cfs_jar` - returns bsolute path to the .jar
+# built by `mvn assembly:assembly`
+function abs_path_to_cfs_jar {
+  local jar_filename="cfscriptify-0.0.1-jar-with-dependencies.jar"
+  local cfs_dir="$(dir_of_this_script)"
+  echo -n "$cfs_dir/../target/$jar_filename"
+}
+
+# `dir_of_this_script` - See http://bit.ly/mS6MnB
+function dir_of_this_script {
+  echo -n "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+}
+
 function cfscriptify {
+  local jar="$(abs_path_to_cfs_jar)"
+  verify_jar_exists "$jar"
 
-  # Get the absolute path to the directory that this script (run.sh)
-  # lives in. http://bit.ly/mS6MnB
-  local cfs_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  # Pass stdin to java with `<&0`, and arguments with "$@".
+  # `main()` takes zero arguments, but pass them anyway
+  # so `checkUsage()` can print a helpful message.
+  java -jar "$jar" "$@" <&0
+}
 
-  # Relative to cfs_dir, it's easy to find the "uber jar" built
-  # by `mvn assembly:assembly`
-  local uber_jar="$cfs_dir/../target/cfscriptify-0.0.1-jar-with-dependencies.jar"
-
-  if [ ! -f "$uber_jar" ]; then
-    echo "File not found: $uber_jar" 1>&2
+function verify_jar_exists {
+  local jar="$1"
+  if [ ! -f "$jar" ]; then
+    echo "File not found: $jar" 1>&2
     echo 'Did you run `mvn assembly:assembly` yet?' 1>&2
+    exit 1
   fi
-
-  # CFScriptify.main() reads from stdin, so we pass stdin to java with
-  # `<&0`. Also, main() takes zero  arguments, but we pass them anyway
-  # so that checkUsage() can print a helpful message.
-  java -jar "$uber_jar" "$@" <&0
 }
 
 cfscriptify "$@"
