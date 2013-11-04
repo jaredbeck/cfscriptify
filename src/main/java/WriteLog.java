@@ -6,7 +6,7 @@ public class WriteLog extends Scriptable {
     this.ctx = ctx;
   }
 
-  public String toString() {
+  @Override public String toString() {
     return String.format("WriteLog(%s)", atrs());
   }
 

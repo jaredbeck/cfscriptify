@@ -10,7 +10,7 @@ public class Function extends Scriptable {
     attrs = attrMap(ctx.attribute());
   }
 
-  public String toString() {
+  @Override public String toString() {
     String name   = CFScript.dequote(attrs.get("name"));
     String rtyp   = CFScript.dequote(attrs.get("returntype"));
     String access = CFScript.dequote(attrs.get("access"));

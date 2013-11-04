@@ -12,7 +12,7 @@ public class SCatch extends Scriptable {
     this.ctx = ctx;
   }
 
-  public String toString() {
+  @Override public String toString() {
     return "catch(" + type() + " cfcatch)";
   }
 

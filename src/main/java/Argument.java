@@ -12,7 +12,7 @@ public class Argument extends Scriptable {
     attrs = attrMap(ctx.attribute());
   }
 
-  public String toString() {
+  @Override public String toString() {
     ArrayList base = new ArrayList();
     if (isRequired()) { base.add("required"); }
 
