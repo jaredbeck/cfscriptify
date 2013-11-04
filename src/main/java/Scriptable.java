@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class Scriptable {
+public abstract class Scriptable {
 
   public static boolean hasKey(List<CFMLParser.AttributeContext> ctxs, String k) {
     boolean result = false;
@@ -15,6 +15,8 @@ public class Scriptable {
     }
     return result;
   }
+
+  public abstract String toString();
 
   protected Map attrMap(List<CFMLParser.AttributeContext> ctxs) {
     Map attrs = new HashMap();

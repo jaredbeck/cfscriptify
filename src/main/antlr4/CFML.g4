@@ -11,6 +11,7 @@ blockTag
   | tagComponent
   | tagFunction
   | tagIf
+  | tagLock
   | tagLoop
   | tagScript
   | tagSwitch
@@ -41,6 +42,7 @@ tagBreak : CFBREAK ;
 tagContinue : CFCONTINUE ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE attribute TE ;
+tagLock : CFLOCK attribute* TE block ENDCFLOCK ;
 tagLog : CFLOG attribute* TE ;
 tagLoop : CFLOOP attribute* TE block ENDCFLOOP ;
 tagParam : CFPARAM ;
@@ -140,6 +142,7 @@ CFCATCH     : TS 'catch' ;
 CFCOMPONENT : TS 'component' ;
 CFFUNCTION  : TS 'function' ;
 CFINCLUDE   : TS 'include' ;
+CFLOCK      : TS 'lock' ;
 CFLOG       : TS 'log' ;
 CFLOOP      : TS 'loop' ;
 CFPARAM     : TS 'param' .*? TE ;
@@ -157,6 +160,7 @@ ENDCFDEFAULTCASE : TC 'defaultcase' TE ;
 ENDCFFINALLY : TC 'finally' TE ;
 ENDCFFUNCTION : TC 'function' TE ;
 ENDCFIF     : TC 'if' TE ;
+ENDCFLOCK   : TC 'lock' TE ;
 ENDCFLOOP   : TC 'loop' TE ;
 ENDCFSCRIPT : TC 'script' TE ;
 ENDCFSWITCH : TC 'switch' TE ;

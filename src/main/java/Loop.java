@@ -1,4 +1,4 @@
-public class Loop extends Scriptable {
+public abstract class Loop extends Scriptable {
 
   public boolean hasWarning() {
     return false;

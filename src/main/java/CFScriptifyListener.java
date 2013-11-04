@@ -16,6 +16,21 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	/*
+	http://www.bennadel.com/blog/1663-Learning-ColdFusion-9-CFScript-Updates-For-Tag-Operators.htm
+	http://help.adobe.com/en_US/ColdFusion/9.0/CFMLRef/WSc3ff6d0ea77859461172e0811cbec22c24-7f5d.html
+	*/
+	@Override public void enterTagLock(CFMLParser.TagLockContext ctx) {
+		Lock l = new Lock(ctx);
+		print(l.toString() + " {\n");
+		entab();
+	}
+
+	@Override public void exitTagLock(CFMLParser.TagLockContext ctx) {
+		detab();
+		print("}\n");
+	}
+
 	@Override public void enterTagLog(CFMLParser.TagLogContext ctx) {
 		print(new WriteLog(ctx).toString());
 	}
