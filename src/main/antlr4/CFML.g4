@@ -23,6 +23,7 @@ lineTag
   | tagBreak
   | tagContinue
   | tagInclude
+  | tagLocation
   | tagLog
   | tagParam
   | tagRethrow
@@ -42,6 +43,7 @@ tagBreak : CFBREAK ;
 tagContinue : CFCONTINUE ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE attribute TE ;
+tagLocation : CFLOCATION attribute* TE ;
 tagLock : CFLOCK attribute* TE block ENDCFLOCK ;
 tagLog : CFLOG attribute* TE ;
 tagLoop : CFLOOP attribute* TE block ENDCFLOOP ;
@@ -142,6 +144,7 @@ CFCATCH     : TS 'catch' ;
 CFCOMPONENT : TS 'component' ;
 CFFUNCTION  : TS 'function' ;
 CFINCLUDE   : TS 'include' ;
+CFLOCATION  : TS 'location' ;
 CFLOCK      : TS 'lock' ;
 CFLOG       : TS 'log' ;
 CFLOOP      : TS 'loop' ;
