@@ -6,5 +6,9 @@
   <cfset Sleep(500)>
 </cflock>
 
-<cflock timeout="1" name="x" type="exclusive"></cflock>
+<cflock timeout="1" name="x" type="exclusive">
+  <cflock timeout="1" name="y" type="exclusive">
+  </cflock>
+</cflock>
+
 <cflock timeout="1" scope="Application" type="readOnly"></cflock>
