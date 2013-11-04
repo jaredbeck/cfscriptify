@@ -11,6 +11,10 @@ public class Location extends LineTag {
     return "location";
   }
 
+  @Override protected boolean taggish() {
+    return true;
+  }
+
   @Override protected List<String> attrOutputOrder() {
     return Arrays.asList("url", "statusCode", "addToken");
   }

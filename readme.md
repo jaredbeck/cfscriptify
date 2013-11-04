@@ -60,7 +60,7 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (23)
+### Supported (24)
 
 cfabort
 cfbreak
@@ -68,6 +68,7 @@ cfcatch
 cfcomponent
 cfcontinue
 cfdefaultcase
+cfdump
 cfelse
 cfelseif
 cffinally
@@ -103,10 +104,6 @@ Support is planned for loop over query, structure, and condition.
 Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
-
-### Not Supported Yet (1)
-
-cfdump
 
 ### No Plans to Support (119)
 

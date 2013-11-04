@@ -11,6 +11,10 @@ public class Lock extends LineTag {
     return "lock";
   }
 
+  @Override protected boolean taggish() {
+    return true;
+  }
+
   @Override protected List<String> attrOutputOrder() {
     return Arrays.asList("name", "scope", "type", "timeout", "throwOnTimeout");
   }

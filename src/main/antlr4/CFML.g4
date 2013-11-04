@@ -22,6 +22,7 @@ lineTag
   : tagAbort
   | tagBreak
   | tagContinue
+  | tagDump
   | tagInclude
   | tagLocation
   | tagLog
@@ -41,6 +42,7 @@ cfcomment : CFCOMMENT ;
 
 tagBreak : CFBREAK ;
 tagContinue : CFCONTINUE ;
+tagDump : CFDUMP attribute* TE ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
 tagInclude : CFINCLUDE attribute TE ;
 tagLocation : CFLOCATION attribute* TE ;
@@ -142,6 +144,7 @@ CFARGUMENT  : TS 'argument' ;
 CFCASE      : TS 'case' ;
 CFCATCH     : TS 'catch' ;
 CFCOMPONENT : TS 'component' ;
+CFDUMP      : TS 'dump' ;
 CFFUNCTION  : TS 'function' ;
 CFINCLUDE   : TS 'include' ;
 CFLOCATION  : TS 'location' ;
