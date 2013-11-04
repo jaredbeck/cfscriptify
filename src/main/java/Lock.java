@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Lock extends Scriptable {
+public class Lock extends LineTag {
 
   private CFMLParser.TagLockContext ctx;
   private Map<String, String> attrs;
@@ -22,10 +22,7 @@ public class Lock extends Scriptable {
     return s;
   }
 
-  /* Defining an order, mostly to ensure deterministic output (remember,
-  not all Maps guarantee order).  Also, more important attrs should
-  come first to improve code-reading speed. */
-  private List<String> attrOutputOrder() {
+  protected List<String> attrOutputOrder() {
     return Arrays.asList("name", "scope", "type", "timeout", "throwOnTimeout");
   }
 }

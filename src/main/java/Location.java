@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Location extends Scriptable {
+public class Location extends LineTag {
 
   private CFMLParser.TagLocationContext ctx;
   private Map<String, String> attrs;
@@ -22,7 +22,7 @@ public class Location extends Scriptable {
     return s;
   }
 
-  private List<String> attrOutputOrder() {
+  protected List<String> attrOutputOrder() {
     return Arrays.asList("url", "statusCode", "addToken");
   }
 }
