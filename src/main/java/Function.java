@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public class Function extends Scriptable {
 
@@ -11,10 +13,16 @@ public class Function extends Scriptable {
   }
 
   @Override public String toString() {
-    String name   = CFScript.dequote(attrs.get("name"));
-    String rtyp   = CFScript.dequote(attrs.get("returntype"));
-    String access = CFScript.dequote(attrs.get("access"));
-    String args   = CFScript.argumentsToString(ctx.tagArgument());
-    return String.format("%s %s function %s(%s)", access, rtyp, name, args);
+    ArrayList<String> strs = new ArrayList<String>();
+    if (attrs.containsKey("access")) {
+      strs.add(CFScript.dequote(attrs.get("access")));
+    }
+    if (attrs.containsKey("returntype")) {
+      strs.add(CFScript.dequote(attrs.get("returntype")));
+    }
+    String name = CFScript.dequote(attrs.get("name"));
+    String args = CFScript.argumentsToString(ctx.tagArgument());
+    strs.add(String.format("function %s(%s)", name, args));
+    return StringUtils.join(strs.toArray(), " ");
   }
 }
