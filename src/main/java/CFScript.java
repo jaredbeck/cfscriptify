@@ -20,10 +20,11 @@ public class CFScript {
     return StringUtils.join(strs.toArray(), ", ");
   }
 
+  /* assignment : operand '=' expression ; */
   public static String assignmentToString(CFMLParser.AssignmentContext ctx) {
-    String ref = referenceToString(ctx.reference());
+    String opnd = operandToString(ctx.operand());
     String expr = expressionToString(ctx.expression());
-    return String.format("%s = %s", ref, expr);
+    return String.format("%s = %s", opnd, expr);
   }
 
   public static String atrVal(String assignment) {
@@ -123,45 +124,79 @@ public class CFScript {
     return str;
   }
 
+  /* operand : chainable ( '.' chainable )* ; */
   private static String operandToString(CFMLParser.OperandContext ctx) {
-    String str = null;
-    if (ctx.literal() != null) {
-      str = literalToString(ctx.literal());
+    Iterator<CFMLParser.ChainableContext> i = ctx.chainable().iterator();
+    ArrayList strs = new ArrayList();
+    while(i.hasNext()) { strs.add(chainableToString(i.next())); }
+    return StringUtils.join(strs.toArray(), '.');
+  }
+
+  /* chainable : atom ( message )* ; */
+  private static String chainableToString(CFMLParser.ChainableContext ctx) {
+    String str = "";
+    if (ctx.atom() != null) {
+      str = atomToString(ctx.atom());
     }
-    else if (ctx.reference() != null) {
-      str = referenceToString(ctx.reference());
+    if (ctx.message() != null) {
+      str += messagesToString(ctx.message());
+    }
+    return str;
+  }
+
+  private static String messagesToString(List<CFMLParser.MessageContext> ctxs) {
+    Iterator<CFMLParser.MessageContext> i = ctxs.iterator();
+    ArrayList strs = new ArrayList();
+    while(i.hasNext()) { strs.add(messageToString(i.next())); }
+    return StringUtils.join(strs.toArray(), "");
+  }
+
+  /* message : arrayIndex | funcInvoc ; */
+  private static String messageToString(CFMLParser.MessageContext ctx) {
+    String str = "";
+    if (ctx.arrayIndex() != null) {
+      str = arrayIndexToString(ctx.arrayIndex());
     }
     else if (ctx.funcInvoc() != null) {
       str = funcInvocToString(ctx.funcInvoc());
     }
-    return str;
-  }
-
-  private static String referenceToString(CFMLParser.ReferenceContext ctx) {
-    String str = null;
-    if (ctx.dottedRef() != null) {
-      str = ctx.dottedRef().getText();
-    }
-    else if (ctx.arrayIndex() != null) {
-      str = arrayIndexToString(ctx.arrayIndex());
+    else {
+      die("Unexpected input in message");
     }
     return str;
   }
 
-  private static String arrayIndexToString(CFMLParser.ArrayIndexContext ctx) {
-    String ref = ctx.dottedRef().getText();
-    String ix = expressionToString(ctx.expression());
-    return String.format("%s[%s]", ref, ix);
-  }
-
-  private static String funcInvocToString(CFMLParser.FuncInvocContext ctx) {
-    String ref = null;
-    if (ctx.dottedRef() != null) {
-      ref = ctx.dottedRef().getText();
+  /* atom : VARIABLE_NAME | BUILTIN_FUNC | literal ; */
+  private static String atomToString(CFMLParser.AtomContext ctx) {
+    String str = "";
+    if (ctx.VARIABLE_NAME() != null) {
+      str = ctx.VARIABLE_NAME().getText();
+    }
+    else if (ctx.BUILTIN_FUNC() != null) {
+      str = ctx.BUILTIN_FUNC().getText();
+    }
+    else if (ctx.literal() != null) {
+      str = literalToString(ctx.literal());
     }
     else {
-      ref = ctx.BUILTIN_FUNC().getText();
+      die("Unexpected input in atom");
     }
+    return str;
+  }
+
+  /* arrayIndex : '[' expression ']' ; */
+  private static String arrayIndexToString(CFMLParser.ArrayIndexContext ctx) {
+    return String.format("[%s]", expressionToString(ctx.expression()));
+  }
+
+  /*
+  funcInvoc :
+    '('
+    ( positionalArguments | namedArguments )?
+    ')'
+    ;
+  */
+  private static String funcInvocToString(CFMLParser.FuncInvocContext ctx) {
     String args = "";
     if (ctx.positionalArguments() != null) {
       args = positionalArgumentsToString(ctx.positionalArguments());
@@ -169,7 +204,7 @@ public class CFScript {
     else if (ctx.namedArguments() != null) {
       args = namedArgumentsToString(ctx.namedArguments());
     }
-    return String.format("%s(%s)", ref, args);
+    return String.format("(%s)", args);
   }
 
   private static String namedArgumentsToString(CFMLParser.NamedArgumentsContext ctx) {

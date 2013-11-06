@@ -89,12 +89,16 @@ tagElse : CFELSE block ;
 tagReturn : CFRETURN expression TE ;
 tagSet : CFSET ( assignment | expression ) TE ;
 
-assignment : reference '=' expression ;
+assignment : operand '=' expression ;
 expression : binaryOp | unaryOp | operand | parenthesis ;
 parenthesis : '(' expression ')' ;
 binaryOp : ( operand | parenthesis ) BINARY_OPERATOR expression ;
 unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR expression ;
-operand : literal | reference | funcInvoc ;
+
+operand : chainable ( '.' chainable )* ;
+chainable : atom ( message )* ;
+atom : VARIABLE_NAME | BUILTIN_FUNC | literal ;
+message : arrayIndex | funcInvoc ;
 
 literal : STRING_LITERAL
   | INT_LITERAL
@@ -105,18 +109,14 @@ literal : STRING_LITERAL
 arrayLiteral : '[' positionalArguments ']' ;
 structLiteral : '{' namedArguments '}' ;
 
+arrayIndex : '[' expression ']' ; /* or a struct index.  TODO: rename */
 funcInvoc :
-  ( dottedRef | BUILTIN_FUNC )
   '('
   ( positionalArguments | namedArguments )?
   ')'
   ;
 positionalArguments : expression ( ',' expression )* ;
 namedArguments : assignment ( ',' assignment )* ;
-
-reference : dottedRef | arrayIndex /* or a struct index */ ;
-dottedRef : VARIABLE_NAME ( '.' VARIABLE_NAME )* ;
-arrayIndex : dottedRef '[' expression ']' ;
 
 // Lexer Rules
 // ===========
