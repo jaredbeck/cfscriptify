@@ -89,7 +89,13 @@ tagElse : CFELSE block ;
 tagReturn : CFRETURN expression TE ;
 tagSet : CFSET ( assignment | expression ) TE ;
 
-assignment : operand '=' expression ;
+/* TODO: In `assignment` the disjunction of `( operand '=' |
+ATTRIBUTE_EQ )` is an ugly hack.  The first half (`operand '='`)
+parses assignments with whitespace before the equals sign.  The second
+half (`ATTRIBUTE_EQ`) lexes assignments without whitespace.  Is there
+any way to clean  this up? */
+assignment : ( operand '=' | ATTRIBUTE_EQ ) expression ;
+
 expression : binaryOp | unaryOp | operand | parenthesis ;
 parenthesis : '(' expression ')' ;
 binaryOp : ( operand | parenthesis ) BINARY_OPERATOR expression ;

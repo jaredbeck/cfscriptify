@@ -22,7 +22,13 @@ public class CFScript {
 
   /* assignment : operand '=' expression ; */
   public static String assignmentToString(CFMLParser.AssignmentContext ctx) {
-    String opnd = operandToString(ctx.operand());
+    String opnd = "";
+    if (ctx.operand() != null) {
+      opnd = operandToString(ctx.operand());
+    }
+    else {
+      opnd = StringUtils.removeEnd(ctx.ATTRIBUTE_EQ().getText(), "=");
+    }
     String expr = expressionToString(ctx.expression());
     return String.format("%s = %s", opnd, expr);
   }
