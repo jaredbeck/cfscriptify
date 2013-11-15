@@ -1,4 +1,4 @@
-<cfif form.action eq "recode">
+<cfif form.action EQ "recode">
 	<cfscript>
 		recodeUnit(objUnit);
 		deleteUnit(objUnit);

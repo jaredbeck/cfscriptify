@@ -180,7 +180,9 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		String[] lines = StringUtils.split(scr, "\r\n");
 		int offset = firstLineOffset(lines);
 		for (int i = 0; i < lines.length; i++) {
-			print(lines[i].substring(offset) + "\n");
+			if (lines[i].trim().length() > 0) {
+				print(lines[i].substring(offset) + "\n");
+			}
 		}
 	}
 
