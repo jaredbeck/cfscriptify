@@ -28,6 +28,7 @@ lineTag
   | tagLog
   | tagParam
   | tagRethrow
+  | tagReturn
   | tagSet
   | tagThrow
   ;
@@ -70,7 +71,6 @@ tagFunction
   TE
   tagArgument*
   block
-  tagReturn?
   ENDCFFUNCTION
   ;
 

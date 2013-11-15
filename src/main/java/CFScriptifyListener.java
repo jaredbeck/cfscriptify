@@ -59,7 +59,7 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	/* <cfreturn> */
 	@Override public void enterTagReturn(CFMLParser.TagReturnContext ctx) {
 		String expr = CFScript.expressionToString(ctx.expression());
-		print(String.format("return %s;\n", expr));
+		print(String.format("return %s", expr));
 	}
 
 	/* <cffunction> */
