@@ -54,6 +54,10 @@ class TestSuite
   INPUTS = 'src/test/input'
   OUTPUTS = 'src/test/output'
 
+  def initialize
+    @tests = find_tests
+  end
+
   def run
     results.each(&:print)
     puts # LF
@@ -62,12 +66,12 @@ class TestSuite
   private
 
   def results
-    run_concatenated.zip(tests).map { |a| Result.new(a[1], a[0]) }
+    run_concatenated.zip(@tests).map { |a| Result.new(a[1], a[0]) }
   end
 
   def run_concatenated
     Open3.popen3(cmd) { |stdin, stdout, stderr, wait_thr|
-      tests.each do |test|
+      @tests.each do |test|
         stdin.print test.infile.read
         stdin.print "<!--- most awkward delimiter, ever --->"
       end
@@ -85,11 +89,15 @@ class TestSuite
     Dir.glob "#{INPUTS}/*.cfm"
   end
 
-  def tests
+  def find_tests
     paths.map { |p|
       outfile = File.join([OUTPUTS, File.basename(p)])
-      Test.new(File.new(p), File.new(outfile))
-    }
+      if File.exists?(outfile)
+        Test.new(File.new(p), File.new(outfile))
+      else
+        $stderr.puts "File not found: #{outfile}"
+      end
+    }.compact
   end
 end
 
