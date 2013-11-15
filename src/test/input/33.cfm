@@ -1,1 +1,1 @@
-<cfset a ? b : c>
+<cfset a ? b ? c + d : e : f>

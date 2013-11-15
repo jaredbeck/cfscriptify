@@ -50,6 +50,9 @@ public class CFScript {
 
   public static String expressionToString(CFMLParser.ExpressionContext ctx) {
     String str = null;
+    if (ctx.ternaryOp() != null) {
+      str = ternaryOpToString(ctx.ternaryOp());
+    }
     if (ctx.binaryOp() != null) {
       str = binaryOpToString(ctx.binaryOp());
     }
@@ -93,13 +96,7 @@ public class CFScript {
   }
 
   private static String binaryOpToString(CFMLParser.BinaryOpContext ctx) {
-    String lhs = null;
-    if (ctx.operand() != null) {
-      lhs = operandToString(ctx.operand());
-    }
-    else {
-      lhs = parenthesisToString(ctx.parenthesis());
-    }
+    String lhs = leftOperandToString(ctx.operand(), ctx.parenthesis());
     String rhs = expressionToString(ctx.expression());
     String op = ctx.BINARY_OPERATOR().getText();
     return String.format("%s %s %s", lhs, op, rhs);
@@ -108,6 +105,13 @@ public class CFScript {
   private static void die(String msg) {
     System.err.println("ERROR: " + msg);
     System.exit(1);
+  }
+
+  private static String leftOperandToString(
+    CFMLParser.OperandContext o,
+    CFMLParser.ParenthesisContext p
+  ) {
+    return o != null ? operandToString(o) : parenthesisToString(p);
   }
 
   private static String literalToString(CFMLParser.LiteralContext ctx) {
@@ -229,6 +233,14 @@ public class CFScript {
     ArrayList strs = new ArrayList();
     while(ei.hasNext()) { strs.add(expressionToString(ei.next())); }
     return StringUtils.join(strs.toArray(), ", ");
+  }
+
+  /* ternaryOp : ( operand | parenthesis ) '?' expression ':' expression ; */
+  private static String ternaryOpToString(CFMLParser.TernaryOpContext ctx) {
+    String lhs = leftOperandToString(ctx.operand(), ctx.parenthesis());
+    String happy = expressionToString(ctx.expression().get(0));
+    String sad = expressionToString(ctx.expression().get(1));
+    return String.format("%s ? %s : %s", lhs, happy, sad);
   }
 
   private static String unaryOpToString(CFMLParser.UnaryOpContext ctx) {

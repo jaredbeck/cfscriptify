@@ -96,8 +96,9 @@ half (`ATTRIBUTE_EQ`) lexes assignments without whitespace.  Is there
 any way to clean  this up? */
 assignment : ( operand '=' | ATTRIBUTE_EQ ) expression ;
 
-expression : binaryOp | unaryOp | operand | parenthesis ;
+expression : ternaryOp | binaryOp | unaryOp | operand | parenthesis ;
 parenthesis : '(' expression ')' ;
+ternaryOp : ( operand | parenthesis ) '?' expression ':' expression ;
 binaryOp : ( operand | parenthesis ) BINARY_OPERATOR expression ;
 unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR expression ;
 
