@@ -1,1 +1,1 @@
-header(statuscode="404");
+cfheader(statuscode="404");

@@ -8,7 +8,7 @@ public class Header extends LineTag {
   }
 
   @Override protected String name() {
-    return "header";
+    return "cfheader";
   }
 
   @Override protected boolean taggish() {
