@@ -194,7 +194,7 @@ STRING_LITERAL
 
 /* omg so many operators: http://adobe.ly/cRnrRL */
 UNARY_POSTFIX_OPERATOR : '++' | '--' ;
-UNARY_PREFIX_OPERATOR : 'NOT' | 'not' ;
+UNARY_PREFIX_OPERATOR : 'NOT' | 'not' | 'new' ;
 BINARY_OPERATOR
   : '+'
   | '-'
