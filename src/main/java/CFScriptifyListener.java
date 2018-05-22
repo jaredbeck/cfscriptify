@@ -24,6 +24,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		print(new Location(ctx).toString());
 	}
 
+	@Override public void enterTagHeader(CFMLParser.TagHeaderContext ctx) {
+		print(new Header(ctx).toString());
+	}
+
 	/*
 	http://www.bennadel.com/blog/1663-Learning-ColdFusion-9-CFScript-Updates-For-Tag-Operators.htm
 	http://help.adobe.com/en_US/ColdFusion/9.0/CFMLRef/WSc3ff6d0ea77859461172e0811cbec22c24-7f5d.html

@@ -72,6 +72,7 @@ cfdump
 cfelse
 cfelseif
 cffinally
+cfheader
 cfif
 cfinclude
 cflocation
@@ -152,7 +153,6 @@ cfgrid
 cfgridcolumn
 cfgridrow
 cfgridupdate
-cfheader
 cfhtmlhead
 cfhttp
 cfhttpparam

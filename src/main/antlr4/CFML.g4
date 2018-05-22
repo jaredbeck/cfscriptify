@@ -23,6 +23,7 @@ lineTag
   | tagBreak
   | tagContinue
   | tagDump
+  | tagHeader
   | tagInclude
   | tagLocation
   | tagLog
@@ -45,6 +46,7 @@ tagBreak : CFBREAK ;
 tagContinue : CFCONTINUE ;
 tagDump : CFDUMP attribute* TE ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
+tagHeader : CFHEADER attribute* TE ;
 tagInclude : CFINCLUDE attribute TE ;
 tagLocation : CFLOCATION attribute* TE ;
 tagLock : CFLOCK attribute* TE block ENDCFLOCK ;
@@ -153,6 +155,7 @@ CFCATCH     : TS 'catch' ;
 CFCOMPONENT : TS 'component' ;
 CFDUMP      : TS 'dump' ;
 CFFUNCTION  : TS 'function' ;
+CFHEADER    : TS 'header' ;
 CFINCLUDE   : TS 'include' ;
 CFLOCATION  : TS 'location' ;
 CFLOCK      : TS 'lock' ;
@@ -429,6 +432,7 @@ BUILTIN_FUNC
   | 'GetUserRoles'
   | 'GetWriteableImageFormats'
   | 'Hash'
+  | 'Header'
   | 'Hour'
   | 'HTMLCodeFormat'
   | 'HTMLEditFormat'
