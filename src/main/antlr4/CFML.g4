@@ -102,11 +102,11 @@ expression : ternaryOp | binaryOp | unaryOp | operand | parenthesis ;
 parenthesis : '(' expression ')' ;
 ternaryOp : ( operand | parenthesis ) '?' expression ':' expression ;
 binaryOp : ( operand | parenthesis ) BINARY_OPERATOR expression ;
-unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR expression ;
+unaryOp : operand UNARY_POSTFIX_OPERATOR | UNARY_PREFIX_OPERATOR expression | NEW_KEYWORD operand ;
 
 operand : chainable ( '.' chainable )* ;
 chainable : atom ( message )* ;
-atom : VARIABLE_NAME | BUILTIN_FUNC | literal ;
+atom : VARIABLE_NAME | BUILTIN_FUNC | NEW_KEYWORD | literal ;
 message : arrayIndex | funcInvoc ;
 
 literal : STRING_LITERAL
@@ -197,7 +197,10 @@ STRING_LITERAL
 
 /* omg so many operators: http://adobe.ly/cRnrRL */
 UNARY_POSTFIX_OPERATOR : '++' | '--' ;
-UNARY_PREFIX_OPERATOR : 'NOT' | 'not' | 'new' ;
+UNARY_PREFIX_OPERATOR : 'NOT' | 'not' ;
+/* "new" has to be treated separately, since it can act as a unary prefix
+operator or as an identifier (e.g. a function name). */
+NEW_KEYWORD : 'new' ;
 BINARY_OPERATOR
   : '+'
   | '-'
@@ -742,7 +745,7 @@ symbols. A variable name cannot contain spaces. (http://adobe.ly/1btjPoA)
 Reserved words ".. must not [be used] for .. variables, user-defined
 function names, or custom tag names" (http://adobe.ly/1cMqKML)
 
-This rule must have lower precendence than rules like BINARY_OPERATOR,
+This rule must have lower precedence than rules like BINARY_OPERATOR,
 to prevent incorrectly lexing an operator as a VARIABLE_NAME.
 */
 VARIABLE_NAME : [a-zA-Z_$] [a-zA-Z_$0-9]* ;

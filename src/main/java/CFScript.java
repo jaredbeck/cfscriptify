@@ -185,6 +185,9 @@ public class CFScript {
     else if (ctx.BUILTIN_FUNC() != null) {
       str = ctx.BUILTIN_FUNC().getText();
     }
+    else if (ctx.NEW_KEYWORD() != null) {
+      str = ctx.NEW_KEYWORD().getText();
+    }
     else if (ctx.literal() != null) {
       str = literalToString(ctx.literal());
     }
@@ -248,10 +251,18 @@ public class CFScript {
     if (ctx.UNARY_POSTFIX_OPERATOR() != null) {
       die("Unary postfix operators not yet supported");
     }
-    else {
+    else if (ctx.UNARY_PREFIX_OPERATOR() != null) {
       String op = ctx.UNARY_PREFIX_OPERATOR().getText();
       String expr = expressionToString(ctx.expression());
       str = String.format("%s %s", op, expr);
+    }
+    else if (ctx.NEW_KEYWORD() != null) {
+      String op = ctx.NEW_KEYWORD().getText();
+      String expr = operandToString(ctx.operand());
+      str = String.format("%s %s", op, expr);
+    }
+    else {
+      die("We should not have gotten here.");
     }
     return str;
   }
