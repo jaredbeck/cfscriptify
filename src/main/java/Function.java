@@ -23,6 +23,12 @@ public class Function extends Scriptable {
     String name = CFScript.dequote(attrs.get("name"));
     String args = CFScript.argumentsToString(ctx.tagArgument());
     strs.add(String.format("function %s(%s)", name, args));
+    if (attrs.containsKey("returnformat")) {
+      String returnformat = "returnformat='";
+      returnformat += CFScript.dequote(attrs.get("returnformat"));
+      returnformat += "'";
+      strs.add(returnformat);
+    }
     return StringUtils.join(strs.toArray(), " ");
   }
 }
