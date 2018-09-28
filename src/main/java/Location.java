@@ -16,6 +16,6 @@ public class Location extends LineTag {
   }
 
   @Override protected List<String> attrOutputOrder() {
-    return Arrays.asList("url", "statusCode", "addToken");
+    return Arrays.asList("url", "statuscode", "addtoken");
   }
 }

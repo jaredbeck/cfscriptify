@@ -23,7 +23,7 @@ public abstract class Scriptable {
     Iterator<CFMLParser.AttributeContext> i = ctxs.iterator();
     while(i.hasNext()) {
       CFMLParser.AttributeContext c = i.next();
-      attrs.put(key(c), value(c));
+      attrs.put(key(c).toLowerCase(), value(c));
     }
     return attrs;
   }

@@ -1,1 +1,1 @@
-location url="https://example.com" statusCode="302" addToken="false";
+location url="https://example.com" statuscode="302" addtoken="false";
