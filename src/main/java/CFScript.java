@@ -22,6 +22,11 @@ public class CFScript {
 
   /* assignment : operand '=' expression ; */
   public static String assignmentToString(CFMLParser.AssignmentContext ctx) {
+    String varKeyword = "";
+    if (ctx.VAR_KEYWORD() != null) {
+      varKeyword = "var ";
+    }
+
     String opnd = "";
     if (ctx.operand() != null) {
       opnd = operandToString(ctx.operand());
@@ -30,7 +35,7 @@ public class CFScript {
       opnd = StringUtils.removeEnd(ctx.ATTRIBUTE_EQ().getText(), "=");
     }
     String expr = expressionToString(ctx.expression());
-    return String.format("%s = %s", opnd, expr);
+    return String.format("%s%s = %s", varKeyword, opnd, expr);
   }
 
   public static String atrVal(String assignment) {

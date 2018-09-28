@@ -96,7 +96,7 @@ ATTRIBUTE_EQ )` is an ugly hack.  The first half (`operand '='`)
 parses assignments with whitespace before the equals sign.  The second
 half (`ATTRIBUTE_EQ`) lexes assignments without whitespace.  Is there
 any way to clean  this up? */
-assignment : ( operand '=' | ATTRIBUTE_EQ ) expression ;
+assignment : VAR_KEYWORD? ( operand '=' | ATTRIBUTE_EQ ) expression ;
 
 expression : ternaryOp | binaryOp | unaryOp | operand | parenthesis ;
 parenthesis : '(' expression ')' ;
@@ -260,6 +260,8 @@ BINARY_OPERATOR
   | 'lte'
   | 'le'
   ;
+
+VAR_KEYWORD : 'var' ;
 
 /* Built-in function names are all reserved words, all 470 of them. */
 BUILTIN_FUNC
