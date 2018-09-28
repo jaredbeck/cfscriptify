@@ -21,6 +21,7 @@ blockTag
 lineTag
   : tagAbort
   | tagBreak
+  | tagContent
   | tagContinue
   | tagDump
   | tagHeader
@@ -43,6 +44,7 @@ cfcomment : CFCOMMENT ;
 // --------------------------------------------
 
 tagBreak : CFBREAK ;
+tagContent : CFCONTENT attribute* TE ;
 tagContinue : CFCONTINUE ;
 tagDump : CFDUMP attribute* TE ;
 tagFinally  : CFFINALLY block ENDCFFINALLY ;
@@ -153,6 +155,7 @@ CFARGUMENT  : TS 'argument' ;
 CFCASE      : TS 'case' ;
 CFCATCH     : TS 'catch' ;
 CFCOMPONENT : TS 'component' ;
+CFCONTENT   : TS 'content' ;
 CFDUMP      : TS 'dump' ;
 CFFUNCTION  : TS 'function' ;
 CFHEADER    : TS 'header' ;

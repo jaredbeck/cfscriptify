@@ -60,12 +60,13 @@ References
 Appendix A: Supported CFML Tags
 -------------------------------
 
-### Supported (24)
+### Supported (25)
 
 cfabort
 cfbreak
 cfcatch
 cfcomponent
+cfcontent
 cfcontinue
 cfdefaultcase
 cfdump
@@ -106,7 +107,7 @@ Loop over date range is rare, but wouldn't be too difficult to
 implement.  Finally, loop over file is rare and has no convenient
 cfscript equivalent.
 
-### No Plans to Support (119)
+### No Plans to Support (118)
 
 These tags either do not have convenient cfscript equivalents, have
 complicated varients (eg. cffile), or are too rare to be worth the
@@ -122,7 +123,6 @@ cfcalendar
 cfchart
 cfchartdata
 cfchartseries
-cfcontent
 cfcol
 cfcollection
 cfcookie

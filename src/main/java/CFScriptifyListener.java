@@ -16,6 +16,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 		depth = 0;
 	}
 
+	@Override public void enterTagContent(CFMLParser.TagContentContext ctx) {
+		print(new Content(ctx).toString());
+	}
+
 	@Override public void enterTagDump(CFMLParser.TagDumpContext ctx) {
 		print(new Dump(ctx).toString());
 	}
