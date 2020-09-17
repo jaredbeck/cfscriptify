@@ -5,7 +5,8 @@ Converts [CFML][17] to [cfscript][16] using Java.
 
 ## Compile
 
-Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8)
+Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8, also
+via [homebrew][25])
 
 ```bash
 mvn -q compile assembly:single
@@ -23,7 +24,7 @@ echo '<cfset x = 1>' | java -jar target/cfscriptify-0.0.1.jar
 # x = 1;
 ```
 
-There's also an optional `bin/run.sh` that may be convenient for some people.
+There's an optional `bin/run.sh` that may be convenient for some people.
 
 ### Sublime Text 2 Plugin
 
@@ -278,3 +279,4 @@ cfzipparam
 [22]: http://adobe.ly/9naZLp "Defining components and functions in CFScript"
 [23]: http://adobe.ly/16LAPWv "cfargument"
 [24]: http://maven.apache.org/
+[25]: https://brew.sh/
