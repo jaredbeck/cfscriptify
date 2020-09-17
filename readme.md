@@ -1,7 +1,7 @@
 CFScriptify
 ===========
 
-Converts [CFML][17] to [cfscript][16] using Java.  ([video demo][25])
+Converts [CFML][17] to [cfscript][16] using Java.
 
 ## Compile
 
@@ -278,4 +278,3 @@ cfzipparam
 [22]: http://adobe.ly/9naZLp "Defining components and functions in CFScript"
 [23]: http://adobe.ly/16LAPWv "cfargument"
 [24]: http://maven.apache.org/
-[25]: http://youtu.be/PlLoye06UOc
