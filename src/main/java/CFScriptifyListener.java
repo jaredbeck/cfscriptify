@@ -10,10 +10,15 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CFScriptifyListener extends CFMLBaseListener {
 
-	private int depth; // for indentation
+	// Current indentation depth. The number of indents.
+	private int depth;
+
+	// The number of `catch`es exited, in the current `try`.
+	private int catchesExited;
 
 	public CFScriptifyListener() {
 		depth = 0;
+		catchesExited = 0;
 	}
 
 	@Override public void enterTagContent(CFMLParser.TagContentContext ctx) {
@@ -146,6 +151,10 @@ public class CFScriptifyListener extends CFMLBaseListener {
 
 	/* <cfcatch type="foo"> */
 	@Override public void enterTagCatch(CFMLParser.TagCatchContext ctx) {
+		if (catchesExited == 0) {
+			detab();
+			print("}\n");
+		}
 		print(new SCatch(ctx).toString() + " {\n");
 		entab();
 	}
@@ -153,17 +162,18 @@ public class CFScriptifyListener extends CFMLBaseListener {
 	@Override public void exitTagCatch(CFMLParser.TagCatchContext ctx) {
 		detab();
 		print("}\n");
+		catchesExited ++;
 	}
 
 	/* <cftry> */
 	@Override public void enterTagTry(CFMLParser.TagTryContext ctx) {
+		catchesExited = 0;
 		print("try {\n");
 		entab();
 	}
 
 	@Override public void exitTagTry(CFMLParser.TagTryContext ctx) {
-		detab();
-		print("}\n");
+		// noop
 	}
 
 	@Override public void enterTagParam(CFMLParser.TagParamContext ctx) {
