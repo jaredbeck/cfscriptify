@@ -3,25 +3,27 @@ CFScriptify
 
 Converts [CFML][17] to [cfscript][16] using Java.  ([video demo][25])
 
-Usage
------
+## Compile
 
 Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8)
 
-    mvn --version
-    mvn -q compile assembly:single
-    bin/test.rb
-    bin/run.sh < src/test/input/01.cfm
+```bash
+mvn -q compile assembly:single
+```
 
-### Limitations
+Compiles `target/cfscriptify-0.0.1.jar`. Maven calls this is an "assembly",
+meaning a self-contained jar, including its dependencies.
 
-- Tags: Only the most common 20% of tags are supported (See Appendix A).
-- Operators: Mixed-case, eg. CoNtAiNs, is legal in CFML, but not supported here.
+## Usage
 
-### Whitespace Output
+Reads CFML on stdin, writes cfscript to stdout.
 
-- Line Endings: LF (but CR and CRLF are acceptable as input)
-- Indentation: Tabs, but I'd welcome a pull request for spaces
+```bash
+echo '<cfset x = 1>' | java -jar target/cfscriptify-0.0.1.jar
+# x = 1;
+```
+
+There's also an optional `bin/run.sh` that may be convenient for some people.
 
 ### Sublime Text 2 Plugin
 
@@ -37,8 +39,29 @@ Nothing polished yet, but here's a starting point:
 1. If it works, bind a key, eg.
     * `{ "keys": ["ctrl+alt+super+s"], "command": "cfscriptify" }`
 
-References
-----------
+## Limitations
+
+- Tags: Only the most common 20% of tags are supported (See Appendix A).
+- Operators: Mixed-case, eg. CoNtAiNs, is legal in CFML, but not supported here.
+
+### Whitespace Output
+
+- Line Endings: LF (but CR and CRLF are acceptable as input)
+- Indentation: Tabs, but I'd welcome a pull request for spaces
+
+## Development
+
+PRs welcome.
+
+```bash
+bin/test.rb
+```
+
+1. Write a new test in `src/test`
+1. Most changes start in `src/main/java/CFScriptifyListener.java`
+1. Sometimes, we need to improve the ANTLR grammar, `src/main/antlr4/CFML.g4`
+
+## References
 
 * [Adobe ColdFusion 10 documentation][18]
 * [ANTLR 4 Runtime API][1]
@@ -57,8 +80,7 @@ References
     * [Removing left recursion][20]
     * [ANTLR - left recursion removal assistance][19]
 
-Appendix A: Supported CFML Tags
--------------------------------
+## Appendix A: Supported CFML Tags
 
 ### Supported (25)
 

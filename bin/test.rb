@@ -51,16 +51,35 @@ class Result
 end
 
 class TestSuite
-  def initialize
+  def initialize(*args)
+    opts = parse_cli_args(args)
+    @compile = opts.fetch(:compile)
     @tests = find_tests
   end
 
   def run
+    compile
     results.each(&:print)
     puts # LF
   end
 
   private
+
+  def compile
+    return unless @compile
+    `mvn -q compile assembly:single`
+  end
+
+  def parse_cli_args(args)
+    if args.length == 0
+      { compile: true }
+    elsif args == ['--skip-compile']
+      { compile: false }
+    else
+      warn 'Usage: bin/test.rb [--skip-compile]'
+      exit 1
+    end
+  end
 
   def results
     run_concatenated.zip(@tests).map { |a| Result.new(a[1], a[0]) }
@@ -102,4 +121,4 @@ class TestSuite
   end
 end
 
-TestSuite.new.run
+TestSuite.new(*ARGV).run
