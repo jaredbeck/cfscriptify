@@ -1,6 +1,7 @@
 .DS_Store
 classpath.txt
 *.class
+*.iml
 *.tokens
 *.log
 src/main/antlr4/*.java
