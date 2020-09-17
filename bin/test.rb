@@ -51,9 +51,6 @@ class Result
 end
 
 class TestSuite
-  INPUTS = 'src/test/input'
-  OUTPUTS = 'src/test/output'
-
   def initialize
     @tests = find_tests
   end
@@ -90,12 +87,16 @@ class TestSuite
   end
 
   def find_tests
-    paths.map { |p|
-      outfile = File.join([OUTPUTS, File.basename(p)])
-      if File.exists?(outfile)
-        Test.new(File.new(p), File.new(outfile))
+    dir = Dir.new(File.join(__dir__, '..', 'src', 'test'))
+    dir.children.map { |test_dir|
+      infile = File.join(dir, test_dir, 'in.cfm')
+      outfile = File.join(dir, test_dir, 'out.cfm')
+      if !File.exists?(infile)
+        warn "File not found: #{infile}"
+      elsif !File.exists?(outfile)
+        warn "File not found: #{outfile}"
       else
-        $stderr.puts "File not found: #{outfile}"
+        Test.new(File.new(infile), File.new(outfile))
       end
     }.compact
   end
