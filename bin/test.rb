@@ -7,10 +7,10 @@ require 'open3'
 class Test
   attr_reader :number, :infile, :outfile
 
-  def initialize infile, outfile
+  def initialize(infile, outfile, number)
     @infile = infile
     @outfile = outfile
-    @number = File.basename(@infile.path, ".cfm")
+    @number = number
   end
 end
 
@@ -123,7 +123,7 @@ class TestSuite
       elsif !File.exists?(outfile)
         warn "File not found: #{outfile}"
       else
-        Test.new(File.new(infile), File.new(outfile))
+        Test.new(File.new(infile), File.new(outfile), test_dir)
       end
     }.compact
   end
