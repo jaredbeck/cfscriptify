@@ -6,7 +6,7 @@ Converts [CFML][17] to [cfscript][16].
 ## Compile
 
 ```bash
-mvn --quiet compile assembly:single
+mvn --quiet clean compile assembly:single
 ```
 
 [Maven][24] 3 is assumed. For Mac users, it is available via [homebrew][25].
@@ -55,7 +55,7 @@ Nothing polished yet, but here's a starting point:
 PRs welcome.
 
 ```bash
-bin/test.rb
+bin/test.rb [--skip-compile] [test numbers ..]
 ```
 
 1. Write a new test in `src/test`
