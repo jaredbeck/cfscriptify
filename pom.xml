@@ -70,9 +70,9 @@
         </configuration>
       </plugin>
 
-      <!-- maven-assembly-plugin provides `assembly:single` goal
-      which builds an "uber jar" at `target/cfscriptify-0.0.1.jar`
-      http://bit.ly/3SzMmB -->
+      <!-- maven-assembly-plugin provides `assembly:single` goal which builds a
+      "self-contained" jar (includes dependencies) at
+      `target/cfscriptify-0.0.1.jar` http://bit.ly/3SzMmB -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.4</version>

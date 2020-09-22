@@ -1,23 +1,23 @@
 CFScriptify
 ===========
 
-Converts [CFML][17] to [cfscript][16] using Java.
+Converts [CFML][17] to [cfscript][16].
 
 ## Compile
 
-Assuming you have [maven][24] 3 (standard on mac os 10.7, 10.8, also
-via [homebrew][25])
-
 ```bash
-mvn -q compile assembly:single
+mvn --quiet compile assembly:single
 ```
 
-Compiles `target/cfscriptify-0.0.1.jar`. Maven calls this is an "assembly",
-meaning a self-contained jar, including its dependencies.
+[Maven][24] 3 is assumed. For Mac users, it is available via [homebrew][25].
+
+The `assembly:single` "goal" (from `maven-assembly-plugin`) compiles
+`target/cfscriptify-0.0.1.jar`. This `jar` is self-contained, ie. includes its
+dependencies.
 
 ## Usage
 
-Reads CFML on stdin, writes cfscript to stdout.
+Reads [CFML][17] on stdin, writes [cfscript][16] to stdout.
 
 ```bash
 echo '<cfset x = 1>' | java -jar target/cfscriptify-0.0.1.jar

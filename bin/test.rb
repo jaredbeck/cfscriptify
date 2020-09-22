@@ -67,7 +67,7 @@ class TestSuite
 
   def compile
     return unless @compile
-    `mvn -q compile assembly:single`
+    `mvn --quiet compile assembly:single`
   end
 
   def parse_cli_args(args)
@@ -82,9 +82,17 @@ class TestSuite
   end
 
   def results
-    run_concatenated.zip(@tests).map { |a| Result.new(a[1], a[0]) }
+    run_concatenated.
+      zip(@tests). # Correlate test with actual output
+      map { |a|
+        Result.new(
+          a[1], # the `Test`
+          a[0] # the actual output
+        )
+      }
   end
 
+  # Optimization: to avoid JVM startup cost, we only execute `cmd` once.
   def run_concatenated
     Open3.popen3(cmd) { |stdin, stdout, stderr, wait_thr|
       @tests.each do |test|
